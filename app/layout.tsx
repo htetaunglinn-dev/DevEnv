@@ -28,7 +28,7 @@ export default function RootLayout({
         >
           <div >
             <Navbar />
-            <div className='wrapperflex'>
+            <div className='wrapper flex'>
               <SideDrawer />
               {children}
             </div>
