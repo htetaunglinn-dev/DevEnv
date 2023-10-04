@@ -13,6 +13,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Image from 'next/image'
 import { formatTitle } from '@/utils/formatTitle'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { resolve } from 'path'
 
 export default async function Home() {
 
@@ -22,6 +24,14 @@ export default async function Home() {
   if (!session) {
     redirect('/')
   }
+
+  //React Query
+  const fetchPost = async (page: number) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    return articles.slice((page - 1) * 10, page * 10)
+  }
+
+
 
   return (
     <main className='w-full'>

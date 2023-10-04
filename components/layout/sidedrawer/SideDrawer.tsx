@@ -75,7 +75,7 @@ const SideDrawer = () => {
 
     return (
         <ScrollArea className={`${isExpanded ? 'w-68' : 'w-fit'} border-r border-gray-300/50 dark:border-gray-300/10 `}>
-            <div className="h-[calc(100vh-52px)] p-4 flex flex-col justify-between">
+            <div className="hidden h-[calc(100vh-52px)] p-4 sm:flex flex-col justify-between">
                 <section id="menu-section">
                     <div className=" flex justify-between items-center gap-2">
                         <div className={`${isExpanded ? 'w-full' : 'hidden'}`}>
