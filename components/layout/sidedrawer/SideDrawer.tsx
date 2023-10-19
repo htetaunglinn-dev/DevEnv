@@ -96,8 +96,8 @@ const SideDrawer = () => {
                         <h2 className="text-xs dark:text-white/60">Discover</h2>
                         <ul className="my-4">
                             {discoverData.map((item, index) => (
-                                <Link href={item.link}>
-                                    <li key={item.title} className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 ${isExpanded ? 'w-full' : 'w-fit'}`}>
+                                <Link key={item.title} href={item.link}>
+                                    <li className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 ${isExpanded ? 'w-full' : 'w-fit'}`}>
                                         {item.icon}
                                         <span className={`${isExpanded ? 'w-full' : 'w-0 hidden'}`}>{item.title}</span>
                                     </li>
