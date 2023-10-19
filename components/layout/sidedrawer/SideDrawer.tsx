@@ -14,29 +14,35 @@ import { LiaCommentSolid } from 'react-icons/lia'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { RiLogoutBoxRLine } from 'react-icons/ri'
 import { ScrollArea } from "@/components/ui/scroll-area"
+import Link from "next/link"
 
 
 
 const discoverData = [
     {
         title: 'Popular',
-        icon: <PiFireLight size={23} />
+        icon: <PiFireLight size={23} />,
+        link: '/popular'
     },
     {
         title: 'Most Viewed',
-        icon: <BsStar size={23} />
+        icon: <BsStar size={23} />,
+        link: '/most-viewed'
     },
     {
         title: 'Best Authors',
-        icon: <PiUserCircleGear size={23} />
+        icon: <PiUserCircleGear size={23} />,
+        link: '/best-authors'
     },
     {
         title: 'Latest News',
-        icon: <PiNewspaperLight size={23} />
+        icon: <PiNewspaperLight size={23} />,
+        link: '/latest-news'
     },
     {
         title: 'Technology',
-        icon: <FaConnectdevelop size={23} />
+        icon: <FaConnectdevelop size={23} />,
+        link: '/technology'
     },
 ]
 
@@ -75,7 +81,7 @@ const SideDrawer = () => {
 
     return (
         <ScrollArea className={`${isExpanded ? 'w-68' : 'w-fit'} border-r border-gray-300/50 dark:border-gray-300/10 `}>
-            <div className="hidden h-[calc(100vh-52px)] p-4 sm:flex flex-col justify-between">
+            <div className="hidden h-[calc(100vh-52px)] p-4 md:flex flex-col justify-between">
                 <section id="menu-section">
                     <div className=" flex justify-between items-center gap-2">
                         <div className={`${isExpanded ? 'w-full' : 'hidden'}`}>
@@ -90,10 +96,12 @@ const SideDrawer = () => {
                         <h2 className="text-xs dark:text-white/60">Discover</h2>
                         <ul className="my-4">
                             {discoverData.map((item, index) => (
-                                <li key={item.title} className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 ${isExpanded ? 'w-full' : 'w-fit'}`}>
-                                    {item.icon}
-                                    <span className={`${isExpanded ? 'w-full' : 'w-0 hidden'}`}>{item.title}</span>
-                                </li>
+                                <Link href={item.link}>
+                                    <li key={item.title} className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 ${isExpanded ? 'w-full' : 'w-fit'}`}>
+                                        {item.icon}
+                                        <span className={`${isExpanded ? 'w-full' : 'w-0 hidden'}`}>{item.title}</span>
+                                    </li>
+                                </Link>
                             ))}
                         </ul>
                     </div>
