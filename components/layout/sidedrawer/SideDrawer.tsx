@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Input } from "@/components/ui/input"
 
 //icons
-import { BiSolidRightArrow, BiSolidLeftArrow } from 'react-icons/bi'
+import { BiSolidLeftArrow } from 'react-icons/bi'
 import { BsStar, BsBookmark } from 'react-icons/bs'
 import { PiUserCircleGear, PiNewspaperLight, PiArticleMediumDuotone, PiFireLight } from 'react-icons/pi'
 import { GoHistory } from 'react-icons/go'
@@ -49,26 +49,31 @@ const discoverData = [
 const contributeData = [
     {
         title: 'Post article',
-        icon: <PiArticleMediumDuotone size={23} />
+        icon: <PiArticleMediumDuotone size={23} />,
+        link: '/post-article'
     },
     {
         title: 'Give Suggestion',
-        icon: <LiaCommentSolid size={23} />
+        icon: <LiaCommentSolid size={23} />,
+        link: '/give-suggestion'
     },
 ]
 
 const manageData = [
     {
         title: 'Reading History',
-        icon: <GoHistory size={23} />
+        icon: <GoHistory size={23} />,
+        link: '/reading-history'
     },
     {
         title: 'Bookmark',
-        icon: <BsBookmark size={23} />
+        icon: <BsBookmark size={23} />,
+        link: '/bookmark'
     },
     {
         title: 'Customize',
-        icon: <IoSettingsOutline size={23} />
+        icon: <IoSettingsOutline size={23} />,
+        link: '/customize'
     },
 ]
 
@@ -88,7 +93,7 @@ const SideDrawer = () => {
                             <Input name="search" placeholder="Search" className="focus-visible:ring-gray-100/20" />
                         </div>
                         <button className="p-2 dark:border shadow-md dark:border-gray-100/10 rounded-md" onClick={handleToggleExpand}>
-                            {isExpanded ? <BiSolidLeftArrow size={20} className="dark:text-white" /> : <BiSolidRightArrow size={20} className="dark:text-white" />}
+                            {<BiSolidLeftArrow size={20} className={`dark:text-white transition ${isExpanded ? '' : 'rotate-180'}`} />}
                         </button>
                     </div>
                     {/* Discover */}
@@ -110,10 +115,12 @@ const SideDrawer = () => {
                         <h2 className="text-xs dark:text-white/60">Contribute</h2>
                         <ul className="my-4">
                             {contributeData.map((item, index) => (
-                                <li key={item.title} className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 ${isExpanded ? 'w-full' : 'w-fit'}`}>
-                                    {item.icon}
-                                    <span className={`${isExpanded ? 'w-full' : 'w-0 hidden'}`}>{item.title}</span>
-                                </li>
+                                <Link key={item.title} href={item.link}>
+                                    <li className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 ${isExpanded ? 'w-full' : 'w-fit'}`}>
+                                        {item.icon}
+                                        <span className={`${isExpanded ? 'w-full' : 'w-0 hidden'}`}>{item.title}</span>
+                                    </li>
+                                </Link>
                             ))}
                         </ul>
                     </div>
@@ -122,10 +129,12 @@ const SideDrawer = () => {
                         <h2 className="text-xs dark:text-white/60">Manage</h2>
                         <ul className="my-4">
                             {manageData.map((item, index) => (
-                                <li key={item.title} className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 ${isExpanded ? 'w-full' : 'w-fit'}`}>
-                                    {item.icon}
-                                    <span className={`${isExpanded ? 'w-full' : 'w-0 hidden'}`}>{item.title}</span>
-                                </li>
+                                <Link key={item.title} href={item.link}>
+                                    <li className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 ${isExpanded ? 'w-full' : 'w-fit'}`}>
+                                        {item.icon}
+                                        <span className={`${isExpanded ? 'w-full' : 'w-0 hidden'}`}>{item.title}</span>
+                                    </li>
+                                </Link>
                             ))}
                         </ul>
                     </div>

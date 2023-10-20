@@ -1,18 +1,21 @@
+
+
+import Image from 'next/image'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { resolve } from 'path'
+
+
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { articles, technology } from '@/data/articles'
 import {
   Card,
   CardContent,
   CardHeader,
 } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import Image from 'next/image'
 import { formatTitle } from '@/utils/formatTitle'
-import { useInfiniteQuery } from '@tanstack/react-query'
-import { resolve } from 'path'
+import { articles } from '@/data/articles'
 
 export default async function Home() {
-
 
   // React Query
   const fetchPost = async (page: number) => {
@@ -20,12 +23,16 @@ export default async function Home() {
     return articles.slice((page - 1) * 10, page * 10)
   }
 
+  //React Query Infinite Scroll
+
+
+
   return (
     <main className='w-full'>
       <ScrollArea className='h-[calc(100vh-52px)]'>
         <div className='grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 pt-10 p-10'>
           {articles.map((item, index) => (
-            <Card key={item.id} className=' cursor-pointer backdrop-blur-sm bg-white/5'>
+            <Card key={item.id} className='cursor-pointer backdrop-blur-sm bg-white/5 '>
               <CardHeader>
                 <Avatar className='mb-5 w-8 h-8'>
                   <AvatarImage className="rounded-lg inline-block" src={item.avatar} alt="@shadcn" />
