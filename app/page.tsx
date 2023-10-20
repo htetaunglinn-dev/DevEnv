@@ -1,6 +1,3 @@
-import { options } from './api/auth/[...nextauth]/options'
-import { getServerSession } from 'next-auth'
-import { redirect } from 'next/navigation'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { articles, technology } from '@/data/articles'
 import {
@@ -15,12 +12,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { resolve } from 'path'
 
 export default async function Home() {
-  const session = await getServerSession(options)
-  // console.log(session)
 
-  if (!session) {
-    redirect('/')
-  }
 
   // React Query
   const fetchPost = async (page: number) => {
