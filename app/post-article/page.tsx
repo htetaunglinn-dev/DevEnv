@@ -49,7 +49,7 @@ const PostArticlePage = () => {
         <div className="w-full">
             <ScrollArea className='w-full'>
                 <div className="flex justify-center items-center h-[calc(100vh-52px)]">
-                    <Tabs defaultValue="create" className="md:w-[60%]">
+                    <Tabs defaultValue="create" className="w-[80%] md:w-[60%]">
                         <TabsList className="grid w-full grid-cols-2">
                             <TabsTrigger value="create">Create a post</TabsTrigger>
                             <TabsTrigger value="share">Share a post</TabsTrigger>

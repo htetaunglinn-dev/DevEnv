@@ -2,6 +2,12 @@
 
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
+import Link from "next/link"
+import { usePathname } from 'next/navigation'
+
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 //icons
 import { BiSolidLeftArrow } from 'react-icons/bi'
@@ -11,10 +17,10 @@ import { GoHistory } from 'react-icons/go'
 import { IoSettingsOutline } from 'react-icons/io5'
 import { FaConnectdevelop } from 'react-icons/fa'
 import { LiaCommentSolid } from 'react-icons/lia'
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { RiLogoutBoxRLine } from 'react-icons/ri'
-import { ScrollArea } from "@/components/ui/scroll-area"
-import Link from "next/link"
+
+
+
 
 
 
@@ -70,15 +76,18 @@ const manageData = [
         icon: <BsBookmark size={23} />,
         link: '/bookmark'
     },
-    {
-        title: 'Customize',
-        icon: <IoSettingsOutline size={23} />,
-        link: '/customize'
-    },
+
 ]
+
+// {
+//     title: 'Customize',
+//     icon: <IoSettingsOutline size={23} />,
+//     link: '/customize'
+// },
 
 const SideDrawer = () => {
     const [isExpanded, setIsExpanded] = useState(true);
+    const pathname = usePathname();
 
     const handleToggleExpand = () => {
         setIsExpanded(!isExpanded);
@@ -102,7 +111,7 @@ const SideDrawer = () => {
                         <ul className="my-4">
                             {discoverData.map((item, index) => (
                                 <Link key={item.title} href={item.link}>
-                                    <li className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 ${isExpanded ? 'w-full' : 'w-fit'}`}>
+                                    <li className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 ${isExpanded ? 'w-full' : 'w-fit'} ${pathname === item.link ? 'dark:bg-gray-100/5 bg-gray-200/60' : ''}}`}>
                                         {item.icon}
                                         <span className={`${isExpanded ? 'w-full' : 'w-0 hidden'}`}>{item.title}</span>
                                     </li>
@@ -116,7 +125,7 @@ const SideDrawer = () => {
                         <ul className="my-4">
                             {contributeData.map((item, index) => (
                                 <Link key={item.title} href={item.link}>
-                                    <li className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 ${isExpanded ? 'w-full' : 'w-fit'}`}>
+                                    <li className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 ${isExpanded ? 'w-full' : 'w-fit'} ${pathname === item.link ? 'dark:bg-gray-100/5 bg-gray-200/60' : ''}`}>
                                         {item.icon}
                                         <span className={`${isExpanded ? 'w-full' : 'w-0 hidden'}`}>{item.title}</span>
                                     </li>
@@ -130,7 +139,7 @@ const SideDrawer = () => {
                         <ul className="my-4">
                             {manageData.map((item, index) => (
                                 <Link key={item.title} href={item.link}>
-                                    <li className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 ${isExpanded ? 'w-full' : 'w-fit'}`}>
+                                    <li className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 ${isExpanded ? 'w-full' : 'w-fit'} ${pathname === item.link ? 'dark:bg-gray-100/5 bg-gray-200/60' : ''}}`}>
                                         {item.icon}
                                         <span className={`${isExpanded ? 'w-full' : 'w-0 hidden'}`}>{item.title}</span>
                                     </li>
