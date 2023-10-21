@@ -55,74 +55,72 @@ const Navbar = () => {
                             <CgMenuGridO />
                         </Button>
                         </SheetTrigger>
-                        <SheetContent className="p-0">
-                            <ScrollArea className='border-r border-gray-300/50 dark:border-gray-300/10 '>
-                                <div className="mt-10 p-6 h-[calc(100vh-52px)]  md:flex flex-col justify-between">
-                                    <section id="menu-section">
-                                        {/* Discover */}
-                                        <div className="flex flex-col dark:text-white/80">
-                                            <h2 className="text-xs dark:text-white/60">Discover</h2>
-                                            <ul className="my-4">
-                                                {discoverData.map((item, index) => (
-                                                    <Link key={item.title} href={item.link}>
-                                                        <SheetClose asChild>
-                                                            <li className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 `}>
-                                                                {item.icon}
-                                                                <span >{item.title}</span>
-                                                            </li>
-                                                        </SheetClose>
-                                                    </Link>
-                                                ))}
-                                            </ul>
+                        <SheetContent className="p-0 overflow-y-auto">
+                            <div className="mt-10 p-6 h-[calc(100vh-52px)]  md:flex flex-col justify-between">
+                                <section id="menu-section">
+                                    {/* Discover */}
+                                    <div className="flex flex-col dark:text-white/80">
+                                        <h2 className="text-xs dark:text-white/60">Discover</h2>
+                                        <ul className="my-4">
+                                            {discoverData.map((item, index) => (
+                                                <Link key={item.title} href={item.link}>
+                                                    <SheetClose asChild>
+                                                        <li className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 `}>
+                                                            {item.icon}
+                                                            <span >{item.title}</span>
+                                                        </li>
+                                                    </SheetClose>
+                                                </Link>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                    {/* Contribute */}
+                                    <div className="mt-10 flex flex-col dark:text-white/80">
+                                        <h2 className="text-xs dark:text-white/60">Contribute</h2>
+                                        <ul className="my-4">
+                                            {contributeData.map((item, index) => (
+                                                <Link key={item.title} href={item.link}>
+                                                    <SheetClose asChild>
+                                                        <li className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 `}>
+                                                            {item.icon}
+                                                            <span >{item.title}</span>
+                                                        </li>
+                                                    </SheetClose>
+                                                </Link>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                    {/* Manage */}
+                                    <div className="mt-10 flex flex-col dark:text-white/80">
+                                        <h2 className="text-xs dark:text-white/60">Manage</h2>
+                                        <ul className="my-4">
+                                            {manageData.map((item, index) => (
+                                                <Link key={item.title} href={item.link}>
+                                                    <SheetClose asChild>
+                                                        <li className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 `}>
+                                                            {item.icon}
+                                                            <span >{item.title}</span>
+                                                        </li>
+                                                    </SheetClose>
+                                                </Link>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </section>
+                                <footer className="py-4 dark:text-white/80 flex justify-between items-center">
+                                    <div className="flex gap-2 items-center cursor-pointer">
+                                        <Avatar>
+                                            <AvatarImage width={36} className="rounded-lg inline-block" src="https://github.com/shadcn.png" alt="@shadcn" />
+                                            <AvatarFallback>CN</AvatarFallback>
+                                        </Avatar>
+                                        <div>
+                                            <p className="text-xs mb-1">Htet Aung Linn</p>
+                                            <p className="text-xs">Software Developer</p>
                                         </div>
-                                        {/* Contribute */}
-                                        <div className="mt-10 flex flex-col dark:text-white/80">
-                                            <h2 className="text-xs dark:text-white/60">Contribute</h2>
-                                            <ul className="my-4">
-                                                {contributeData.map((item, index) => (
-                                                    <Link key={item.title} href={item.link}>
-                                                        <SheetClose asChild>
-                                                            <li className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 `}>
-                                                                {item.icon}
-                                                                <span >{item.title}</span>
-                                                            </li>
-                                                        </SheetClose>
-                                                    </Link>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                        {/* Manage */}
-                                        <div className="mt-10 flex flex-col dark:text-white/80">
-                                            <h2 className="text-xs dark:text-white/60">Manage</h2>
-                                            <ul className="my-4">
-                                                {manageData.map((item, index) => (
-                                                    <Link key={item.title} href={item.link}>
-                                                        <SheetClose asChild>
-                                                            <li className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 `}>
-                                                                {item.icon}
-                                                                <span >{item.title}</span>
-                                                            </li>
-                                                        </SheetClose>
-                                                    </Link>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    </section>
-                                    <footer className="py-4 dark:text-white/80 flex justify-between items-center">
-                                        <div className="flex gap-2 items-center cursor-pointer">
-                                            <Avatar>
-                                                <AvatarImage width={36} className="rounded-lg inline-block" src="https://github.com/shadcn.png" alt="@shadcn" />
-                                                <AvatarFallback>CN</AvatarFallback>
-                                            </Avatar>
-                                            <div>
-                                                <p className="text-xs mb-1">Htet Aung Linn</p>
-                                                <p className="text-xs">Software Developer</p>
-                                            </div>
-                                        </div>
-                                        <button className="p-2 dark:border shadow-md dark:border-gray-100/10 rounded-md"><RiLogoutBoxRLine size={20} className="dark:text-white" /></button>
-                                    </footer>
-                                </div>
-                            </ScrollArea>
+                                    </div>
+                                    <button className="p-2 dark:border shadow-md dark:border-gray-100/10 rounded-md"><RiLogoutBoxRLine size={20} className="dark:text-white" /></button>
+                                </footer>
+                            </div>
                         </SheetContent>
                     </Sheet>
                 </div>
