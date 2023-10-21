@@ -9,15 +9,29 @@ import {
     HoverCardContent,
     HoverCardTrigger,
 } from "@/components/ui/hover-card"
+import {
+    Sheet,
+    SheetClose,
+    SheetContent,
+    SheetDescription,
+    SheetFooter,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet"
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar"
 import { ModeToggle } from "../ui/mode-toggle"
 import { Button } from "../ui/button"
 import BlackLogo from '@/public/BlackLogo.png'
 import WhiteLogo from '@/public/WhiteLogo.png'
+import { discoverData, contributeData, manageData } from "@/data/sidemenu"
 
 //icons
 import { IoNotificationsOutline } from 'react-icons/io5'
 import { CalendarIcon } from "@radix-ui/react-icons"
+import { CgMenuGridO } from 'react-icons/cg'
+import { ScrollArea } from "@radix-ui/react-scroll-area"
+import { RiLogoutBoxRLine } from "react-icons/ri"
 
 const Navbar = () => {
 
@@ -32,8 +46,86 @@ const Navbar = () => {
                 </Link>
             </div>
             <div className="flex justify-center items-center gap-3">
-                <Button type="button" onClick={() => router.push('/post-article')} variant="outline">New post</Button>
+                <Button className="hidden md:block" type="button" onClick={() => router.push('/post-article')} variant="outline">New post</Button>
                 <ModeToggle />
+                {/* Mobile Side Drawer */}
+                <div className="md:hidden">
+                    <Sheet>
+                        <SheetTrigger><Button className='px-3 py-3 md:hidden' variant={"outline"} >
+                            <CgMenuGridO />
+                        </Button>
+                        </SheetTrigger>
+                        <SheetContent className="p-0">
+                            <ScrollArea className='border-r border-gray-300/50 dark:border-gray-300/10 '>
+                                <div className="mt-10 p-6 h-[calc(100vh-52px)]  md:flex flex-col justify-between">
+                                    <section id="menu-section">
+                                        {/* Discover */}
+                                        <div className="flex flex-col dark:text-white/80">
+                                            <h2 className="text-xs dark:text-white/60">Discover</h2>
+                                            <ul className="my-4">
+                                                {discoverData.map((item, index) => (
+                                                    <Link key={item.title} href={item.link}>
+                                                        <SheetClose asChild>
+                                                            <li className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 `}>
+                                                                {item.icon}
+                                                                <span >{item.title}</span>
+                                                            </li>
+                                                        </SheetClose>
+                                                    </Link>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                        {/* Contribute */}
+                                        <div className="mt-10 flex flex-col dark:text-white/80">
+                                            <h2 className="text-xs dark:text-white/60">Contribute</h2>
+                                            <ul className="my-4">
+                                                {contributeData.map((item, index) => (
+                                                    <Link key={item.title} href={item.link}>
+                                                        <SheetClose asChild>
+                                                            <li className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 `}>
+                                                                {item.icon}
+                                                                <span >{item.title}</span>
+                                                            </li>
+                                                        </SheetClose>
+                                                    </Link>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                        {/* Manage */}
+                                        <div className="mt-10 flex flex-col dark:text-white/80">
+                                            <h2 className="text-xs dark:text-white/60">Manage</h2>
+                                            <ul className="my-4">
+                                                {manageData.map((item, index) => (
+                                                    <Link key={item.title} href={item.link}>
+                                                        <SheetClose asChild>
+                                                            <li className={`rounded-md flex items-center p-2 gap-4 cursor-pointer hover:bg-gray-200/20 `}>
+                                                                {item.icon}
+                                                                <span >{item.title}</span>
+                                                            </li>
+                                                        </SheetClose>
+                                                    </Link>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </section>
+                                    <footer className="py-4 dark:text-white/80 flex justify-between items-center">
+                                        <div className="flex gap-2 items-center cursor-pointer">
+                                            <Avatar>
+                                                <AvatarImage width={36} className="rounded-lg inline-block" src="https://github.com/shadcn.png" alt="@shadcn" />
+                                                <AvatarFallback>CN</AvatarFallback>
+                                            </Avatar>
+                                            <div>
+                                                <p className="text-xs mb-1">Htet Aung Linn</p>
+                                                <p className="text-xs">Software Developer</p>
+                                            </div>
+                                        </div>
+                                        <button className="p-2 dark:border shadow-md dark:border-gray-100/10 rounded-md"><RiLogoutBoxRLine size={20} className="dark:text-white" /></button>
+                                    </footer>
+                                </div>
+                            </ScrollArea>
+                        </SheetContent>
+                    </Sheet>
+                </div>
                 <HoverCard>
                     <HoverCardTrigger asChild >
                         <Button className="hidden md:block" variant="outline"><IoNotificationsOutline /></Button>
@@ -63,6 +155,7 @@ const Navbar = () => {
                     <AvatarImage width={36} className="rounded-lg inline-block" src="https://github.com/shadcn.png" alt="@shadcn" />
                     <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
+
             </div>
         </nav>
     )

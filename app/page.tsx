@@ -1,5 +1,3 @@
-
-
 import Image from 'next/image'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { resolve } from 'path'
@@ -18,15 +16,12 @@ import Link from 'next/link'
 
 export default async function Home() {
 
+
   // React Query
   const fetchPost = async (page: number) => {
     await new Promise((resolve) => setTimeout(resolve, 1000))
     return articles.slice((page - 1) * 10, page * 10)
   }
-
-  //React Query Infinite Scroll
-
-
 
   return (
     <main className='w-full'>
