@@ -38,8 +38,10 @@ export default async function Home() {
               query: {
                 id: item.id
               }
-            }}>
-              <Card key={item.id} className='cursor-pointer backdrop-blur-sm bg-white/5 '>
+            }}
+              key={item.id}
+            >
+              <Card className='cursor-pointer backdrop-blur-sm bg-white/5 '>
                 <CardHeader>
                   <Avatar className='mb-5 w-8 h-8'>
                     <AvatarImage className="rounded-lg inline-block" src={item.avatar} alt="@shadcn" />
