@@ -20,7 +20,7 @@ interface dataProps {
 
 const BlogPost = ({ data }: dataProps) => {
     return (
-        <div className='grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 pt-10 p-10'>
+        <div className='grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 gap-6 pt-10 p-10'>
             {data.map((item, index) => (
                 <Link
                     href={{
