@@ -1,19 +1,30 @@
-'use client'
+"use client";
 
-import React from 'react'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { populars } from '@/data/articles'
-import BlogPost from '@/components/custom/BlogPost'
+import React, { useEffect, useState } from "react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { readingHistories } from "@/data/articles";
+import BlogPost from "@/components/custom/BlogPost";
+import { useStore } from "@/lib/store";
+import { filterArticlesByTitle } from "@/utils/filterArticlesByTitle";
 
 const ReadingHistoryPage = () => {
-    return (
-        <div className="w-full">
-            <ScrollArea className='h-[calc(100vh-52px)]'>
-                <h2 className='pt-5 pl-6 font-semibold'>Reading History</h2>
-                <BlogPost data={populars} />
-            </ScrollArea>
-        </div>
-    )
-}
+  const [readingHistoriesArticles, setReadingHistoriesArticles] =
+    useState(readingHistories);
+  const searchText = useStore((state) => state.searchText);
 
-export default ReadingHistoryPage
+  useEffect(() => {
+    const filtered = filterArticlesByTitle(readingHistories, searchText);
+    setReadingHistoriesArticles(filtered);
+  }, [searchText]);
+
+  return (
+    <div className="w-full">
+      <ScrollArea className="h-[calc(100vh-52px)]">
+        <h2 className="pl-6 pt-5 font-semibold">Reading History</h2>
+        <BlogPost data={readingHistoriesArticles} />
+      </ScrollArea>
+    </div>
+  );
+};
+
+export default ReadingHistoryPage;

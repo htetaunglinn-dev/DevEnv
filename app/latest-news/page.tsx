@@ -1,16 +1,29 @@
-import BlogPost from '@/components/custom/BlogPost'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { latestNews } from '@/data/articles'
+"use client";
+
+import { useEffect, useState } from "react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { latestNews } from "@/data/articles";
+import { useStore } from "@/lib/store";
+import { filterArticlesByTitle } from "@/utils/filterArticlesByTitle";
+import BlogPost from "@/components/custom/BlogPost";
 
 const LatestNewsPage = () => {
-    return (
-        <div className='w-full'>
-            <ScrollArea className='h-[calc(100vh-52px)]'>
-                <h2 className='pt-5 pl-6 font-semibold'>Latest News</h2>
-                <BlogPost data={latestNews} />
-            </ScrollArea>
-        </div>
-    )
-}
+  const [latestNewsArticles, setLatestNewsArticles] = useState(latestNews);
+  const searchText = useStore((state) => state.searchText);
 
-export default LatestNewsPage
+  useEffect(() => {
+    const filtered = filterArticlesByTitle(latestNews, searchText);
+    setLatestNewsArticles(filtered);
+  }, [searchText]);
+
+  return (
+    <div className="w-full">
+      <ScrollArea className="h-[calc(100vh-52px)]">
+        <h2 className="pl-6 pt-5 font-semibold">Latest News</h2>
+        <BlogPost data={latestNewsArticles} />
+      </ScrollArea>
+    </div>
+  );
+};
+
+export default LatestNewsPage;
