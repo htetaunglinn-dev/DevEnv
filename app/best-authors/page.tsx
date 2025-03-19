@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { bestAuthors } from "@/data/articles";
 import BlogPost from "@/components/custom/BlogPost";
-import { useStore } from "@/lib/store";
+import { useStore } from "@/store/store";
 import { filterArticlesByTitle } from "@/utils/filterArticlesByTitle";
 
 const MostViewedPage = () => {
@@ -19,7 +19,7 @@ const MostViewedPage = () => {
   return (
     <div className="w-full">
       <ScrollArea className="h-[calc(100vh-52px)]">
-        <h2 className="pl-6 pt-5 font-semibold">Best Authors</h2>
+        <h2 className="page-header">Best Authors</h2>
         <BlogPost data={bestAuthorArticles} />
       </ScrollArea>
     </div>

@@ -9,7 +9,6 @@
     --softBg: #f0f0f0;
     --softTextColor: #626262;
 
-
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
 
@@ -75,6 +74,10 @@
   }
 
   body {
-    @apply bg-background text-foreground overflow-y-hidden w-full;
+    @apply w-full overflow-y-hidden bg-background text-foreground;
+  }
+
+  .page-header {
+    @apply px-10 pt-5 font-semibold;
   }
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useStore } from "@/lib/store";
+import { useStore } from "@/store/store";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -18,16 +18,16 @@ const SideDrawer = () => {
   const [isExpanded, setIsExpanded] = useState(true);
   const pathname = usePathname();
 
-  const searchText = useStore((state) => state.searchText);
-  const setSearchText = useStore((state) => state.setSearchText);
-
   const handleToggleExpand = () => {
     setIsExpanded(!isExpanded);
   };
 
+  const setSearchMenu = useStore((state) => state.setSearchMenu);
+  const searchMenu = useStore((state) => state.searchMenu);
+
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setSearchText(value);
+    setSearchMenu(value);
   };
 
   return (
@@ -40,10 +40,11 @@ const SideDrawer = () => {
             <div className={`${isExpanded ? "w-full" : "hidden"}`}>
               <Input
                 name="search"
-                value={searchText}
+                value={searchMenu}
                 onChange={handleSearch}
                 placeholder="Search"
-                className="focus-visible:ring-gray-100/20"
+                autoComplete="off"
+                className=" focus-visible:ring-gray-100/20 "
               />
             </div>
             <button
@@ -61,7 +62,7 @@ const SideDrawer = () => {
           {/* Discover */}
           <div className="mt-10 flex flex-col dark:text-white/80">
             <h2 className="text-xs dark:text-white/60">Discover</h2>
-            <ul className="my-4">
+            <ul className="my-4 flex flex-col gap-2">
               {discoverData.map((item, index) => (
                 <Link key={item.title} href={item.link}>
                   <li
@@ -79,7 +80,7 @@ const SideDrawer = () => {
           {/* Contribute */}
           <div className="mt-10 flex flex-col dark:text-white/80">
             <h2 className="text-xs dark:text-white/60">Contribute</h2>
-            <ul className="my-4">
+            <ul className="my-4 flex flex-col gap-2">
               {contributeData.map((item, index) => (
                 <Link key={item.title} href={item.link}>
                   <li
@@ -97,7 +98,7 @@ const SideDrawer = () => {
           {/* Manage */}
           <div className="mt-10 flex flex-col dark:text-white/80">
             <h2 className="text-xs dark:text-white/60">Manage</h2>
-            <ul className="my-4">
+            <ul className="my-4 flex flex-col gap-2">
               {manageData.map((item, index) => (
                 <Link key={item.title} href={item.link}>
                   <li

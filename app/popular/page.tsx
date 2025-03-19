@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useStore } from "@/lib/store";
+import { useStore } from "@/store/store";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { filterArticlesByTitle } from "@/utils/filterArticlesByTitle";
 import { populars } from "@/data/articles";
@@ -19,7 +19,7 @@ const PopularPage = () => {
   return (
     <div className="w-full">
       <ScrollArea className="h-[calc(100vh-52px)]">
-        <h2 className="pl-6 pt-5 font-semibold">Popular</h2>
+        <h2 className="page-header">Popular</h2>
         <BlogPost data={popularArticles} />
       </ScrollArea>
     </div>

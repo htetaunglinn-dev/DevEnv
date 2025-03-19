@@ -1,21 +1,22 @@
-import './globals.css'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import { ThemeProvider } from '@/components/theme-provider'
-import Navbar from '@/components/navbar/Navbar'
-import SideDrawer from '@/components/layout/sidedrawer/SideDrawer'
+import "./globals.css";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
+import Navbar from "@/components/navbar/Navbar";
+import SideDrawer from "@/components/layout/sidedrawer/SideDrawer";
+import SessionWrapper from "@/components/auth/SessionWrapper";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'DevEnv - Connect with Developers',
-  description: 'The best blog website for developers.',
-}
+  title: "DevEnv - Connect with Developers",
+  description: "The best blog website for developers.",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
@@ -23,21 +24,23 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div >
-            <Navbar />
-            <div className='wrapper flex'>
-              <SideDrawer />
-              {children}
+        <SessionWrapper>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div>
+              <Navbar />
+              <div className="wrapper flex">
+                <SideDrawer />
+                {children}
+              </div>
             </div>
-          </div>
-        </ThemeProvider>
+          </ThemeProvider>
+        </SessionWrapper>
       </body>
     </html>
-  )
+  );
 }
