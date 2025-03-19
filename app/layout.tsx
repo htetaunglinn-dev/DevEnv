@@ -4,7 +4,6 @@ import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/navbar/Navbar";
 import SideDrawer from "@/components/layout/sidedrawer/SideDrawer";
-import SessionWrapper from "@/components/auth/SessionWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,22 +23,20 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body className={inter.className}>
-        <SessionWrapper>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <div>
-              <Navbar />
-              <div className="wrapper flex">
-                <SideDrawer />
-                {children}
-              </div>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div>
+            <Navbar />
+            <div className="wrapper flex">
+              <SideDrawer />
+              {children}
             </div>
-          </ThemeProvider>
-        </SessionWrapper>
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );
