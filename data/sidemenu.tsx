@@ -1,5 +1,5 @@
 //icons
-import { BsStar, BsBookmark } from "react-icons/bs";
+import { BsBookmark } from "react-icons/bs";
 import {
   PiUserCircleGear,
   PiNewspaperLight,
@@ -7,19 +7,19 @@ import {
   PiFireLight,
 } from "react-icons/pi";
 import { GoHistory } from "react-icons/go";
-import { IoSettingsOutline } from "react-icons/io5";
+import { RiHome6Line } from "react-icons/ri";
 import { FaConnectdevelop } from "react-icons/fa";
 import { LiaCommentSolid } from "react-icons/lia";
 
 export const discoverData = [
   {
-    title: "Popular",
-    icon: <PiFireLight size={23} />,
-    link: "/popular",
+    title: "Home",
+    icon: <RiHome6Line size={23} />,
+    link: "/",
   },
   {
     title: "Most Viewed",
-    icon: <BsStar size={23} />,
+    icon: <PiFireLight size={23} />,
     link: "/most-viewed",
   },
   {
