@@ -22,16 +22,16 @@ export const discoverData = [
     icon: <PiFireLight size={23} />,
     link: "/most-viewed",
   },
-  {
-    title: "Best Authors",
-    icon: <PiUserCircleGear size={23} />,
-    link: "/best-authors",
-  },
-  {
-    title: "Latest News",
-    icon: <PiNewspaperLight size={23} />,
-    link: "/latest-news",
-  },
+  // {
+  //   title: "Best Authors",
+  //   icon: <PiUserCircleGear size={23} />,
+  //   link: "/best-authors",
+  // },
+  // {
+  //   title: "Latest News",
+  //   icon: <PiNewspaperLight size={23} />,
+  //   link: "/latest-news",
+  // },
   {
     title: "Technology",
     icon: <FaConnectdevelop size={23} />,
@@ -53,14 +53,14 @@ export const contributeData = [
 ];
 
 export const manageData = [
-  {
-    title: "History",
-    icon: <GoHistory size={23} />,
-    link: "/reading-history",
-  },
-  {
-    title: "Bookmark",
-    icon: <BsBookmark size={23} />,
-    link: "/bookmark",
-  },
+  // {
+  //   title: "History",
+  //   icon: <GoHistory size={23} />,
+  //   link: "/reading-history",
+  // },
+  // {
+  //   title: "Bookmark",
+  //   icon: <BsBookmark size={23} />,
+  //   link: "/bookmark",
+  // },
 ];

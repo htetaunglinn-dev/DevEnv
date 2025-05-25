@@ -96,7 +96,7 @@ const SideDrawer = () => {
             </ul>
           </div>
           {/* Manage */}
-          <div className="mt-10 flex flex-col dark:text-white/80">
+          {/* <div className="mt-10 flex flex-col dark:text-white/80">
             <h2 className="text-xs dark:text-white/60">Manage</h2>
             <ul className="my-4 flex flex-col gap-2">
               {manageData.map((item, index) => (
@@ -112,7 +112,7 @@ const SideDrawer = () => {
                 </Link>
               ))}
             </ul>
-          </div>
+          </div> */}
         </section>
         <footer className="flex items-center justify-between py-4 dark:text-white/80">
           <div className="flex cursor-pointer items-center gap-2">
