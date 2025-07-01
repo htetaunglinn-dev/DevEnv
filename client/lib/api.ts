@@ -14,7 +14,7 @@ export async function apiRequest<T>(
   options: RequestInit = {},
 ): Promise<T> {
   const baseUrl =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
   const url = `${baseUrl}${endpoint}`;
 
   const token = localStorage.getItem("token");
