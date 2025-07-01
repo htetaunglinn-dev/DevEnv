@@ -69,16 +69,16 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="flex items-center justify-center gap-3">
-        <Input
-          name="search"
-          value={searchText}
-          onChange={handleSearch}
-          placeholder="Search"
-          autoComplete="off"
-          className="w-36 focus-visible:ring-gray-100/20 md:w-60"
-        />
         {isAuthenticated ? (
           <>
+            <Input
+              name="search"
+              value={searchText}
+              onChange={handleSearch}
+              placeholder="Search"
+              autoComplete="off"
+              className="w-36 focus-visible:ring-gray-100/20 md:w-60"
+            />
             <Button
               className="hidden md:block"
               type="button"
@@ -156,7 +156,7 @@ const Navbar = () => {
                         </ul>
                       </div>
                     </section>
-                    <footer className="flex items-center justify-center py-4 dark:text-white/80">
+                    <footer className="flex items-center justify-start py-4 dark:text-white/80">
                       <div className="flex cursor-pointer items-center gap-2">
                         <Avatar>
                           <AvatarImage
@@ -170,7 +170,11 @@ const Navbar = () => {
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="mb-1 text-xs">{user?.firstName ? `${user.firstName} ${user.lastName}` : "User"}</p>
+                          <p className="mb-1 text-xs">
+                            {user?.firstName
+                              ? `${user.firstName} ${user.lastName}`
+                              : "User"}
+                          </p>
                           <p className="text-xs">{user?.email}</p>
                         </div>
                       </div>
@@ -215,21 +219,25 @@ const Navbar = () => {
             </HoverCard>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Avatar className="hidden md:block cursor-pointer">
+                <Avatar className="hidden cursor-pointer md:block">
                   <AvatarImage
                     width={36}
                     className="inline-block rounded-lg"
                     src="https://github.com/shadcn.png"
                     alt="@shadcn"
                   />
-                  <AvatarFallback>{user?.firstName?.charAt(0) || "U"}</AvatarFallback>
+                  <AvatarFallback>
+                    {user?.firstName?.charAt(0) || "U"}
+                  </AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium leading-none">
-                      {user?.firstName ? `${user.firstName} ${user.lastName}` : "User"}
+                      {user?.firstName
+                        ? `${user.firstName} ${user.lastName}`
+                        : "User"}
                     </p>
                     <p className="text-xs leading-none text-muted-foreground">
                       {user?.email}
@@ -244,9 +252,9 @@ const Navbar = () => {
                   Settings
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem 
+                <DropdownMenuItem
                   onClick={logout}
-                  className="text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400"
+                  className="text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
                 >
                   <RiLogoutBoxRLine className="mr-2 h-4 w-4" />
                   Sign out
@@ -266,7 +274,7 @@ const Navbar = () => {
             </Button>
             <Button
               onClick={() => router.push("/signup")}
-              className="hidden md:block bg-blue-600 hover:bg-blue-700"
+              className="hidden bg-blue-600 text-white hover:bg-blue-700 md:block"
             >
               Sign Up
             </Button>
@@ -282,7 +290,7 @@ const Navbar = () => {
               <Button
                 onClick={() => router.push("/signup")}
                 size="sm"
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-blue-600 text-white hover:bg-blue-700"
               >
                 Sign Up
               </Button>
