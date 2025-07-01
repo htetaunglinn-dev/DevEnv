@@ -41,7 +41,7 @@ export default function LoginPage() {
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      router.push("/dashboard");
+      router.push("/");
     }
   }, [isAuthenticated, router]);
 
@@ -51,7 +51,7 @@ export default function LoginPage() {
     try {
       await login(data);
       reset(); // Clear form
-      router.push("/dashboard");
+      // Don't redirect immediately, let the useEffect handle it
     } catch (error: any) {
       setSubmitError(error.message || "Login failed. Please try again.");
     }
@@ -71,32 +71,32 @@ export default function LoginPage() {
   // Show loading state during initial auth check
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-900 dark:to-gray-800">
         <div className="text-center">
-          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-indigo-600"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
+          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-blue-600"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-300">Loading...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-900 dark:to-gray-800 px-4">
       <div className="w-full max-w-md space-y-8">
-        <div className="rounded-2xl bg-white p-8 shadow-xl">
+        <div className="rounded-2xl bg-white dark:bg-gray-800 p-8 shadow-xl dark:shadow-2xl">
           {/* Header */}
           <div className="text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-600">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600">
               <LogIn className="h-6 w-6 text-white" />
             </div>
-            <h2 className="mt-6 text-3xl font-bold text-gray-900">
+            <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
               Welcome back
             </h2>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
               Don`t have an account?{" "}
               <Link
                 href="/signup"
-                className="font-medium text-indigo-600 transition-colors hover:text-indigo-500"
+                className="font-medium text-blue-600 transition-colors hover:text-blue-500"
               >
                 Sign up
               </Link>
@@ -107,7 +107,7 @@ export default function LoginPage() {
           <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
             {/* Submit Error */}
             {submitError && (
-              <div className="flex items-center rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              <div className="flex items-center rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/50 px-4 py-3 text-sm text-red-700 dark:text-red-300">
                 <AlertCircle className="mr-2 h-4 w-4 flex-shrink-0" />
                 {submitError}
               </div>
@@ -118,30 +118,30 @@ export default function LoginPage() {
               <div>
                 <label
                   htmlFor="email"
-                  className="mb-1 block text-sm font-medium text-gray-700"
+                  className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   Email address
                 </label>
                 <div className="relative">
                   <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <Mail className="h-5 w-5 text-gray-400" />
+                    <Mail className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                   </div>
                   <input
                     {...register("email")}
                     id="email"
                     type="email"
                     autoComplete="email"
-                    className={`block w-full rounded-lg border py-3 pl-10 pr-3 transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                    className={`block w-full rounded-lg border py-3 pl-10 pr-3 transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
                       errors.email
-                        ? "border-red-300 focus:ring-red-500"
-                        : "border-gray-300"
+                        ? "border-red-300 dark:border-red-600 focus:ring-red-500"
+                        : "border-gray-300 dark:border-gray-600"
                     }`}
                     placeholder="Enter your email"
                     disabled={isSubmitting}
                   />
                 </div>
                 {errors.email && (
-                  <p className="mt-1 flex items-center text-sm text-red-600">
+                  <p className="mt-1 flex items-center text-sm text-red-600 dark:text-red-400">
                     <AlertCircle className="mr-1 h-4 w-4" />
                     {errors.email.message}
                   </p>
@@ -152,23 +152,23 @@ export default function LoginPage() {
               <div>
                 <label
                   htmlFor="password"
-                  className="mb-1 block text-sm font-medium text-gray-700"
+                  className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   Password
                 </label>
                 <div className="relative">
                   <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <Lock className="h-5 w-5 text-gray-400" />
+                    <Lock className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                   </div>
                   <input
                     {...register("password")}
                     id="password"
                     type={showPassword ? "text" : "password"}
                     autoComplete="current-password"
-                    className={`block w-full rounded-lg border py-3 pl-10 pr-10 transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                    className={`block w-full rounded-lg border py-3 pl-10 pr-10 transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
                       errors.password
-                        ? "border-red-300 focus:ring-red-500"
-                        : "border-gray-300"
+                        ? "border-red-300 dark:border-red-600 focus:ring-red-500"
+                        : "border-gray-300 dark:border-gray-600"
                     }`}
                     placeholder="Enter your password"
                     disabled={isSubmitting}
@@ -180,14 +180,14 @@ export default function LoginPage() {
                     disabled={isSubmitting}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-5 w-5 text-gray-400 transition-colors hover:text-gray-600" />
+                      <EyeOff className="h-5 w-5 text-gray-400 dark:text-gray-500 transition-colors hover:text-gray-600 dark:hover:text-gray-300" />
                     ) : (
-                      <Eye className="h-5 w-5 text-gray-400 transition-colors hover:text-gray-600" />
+                      <Eye className="h-5 w-5 text-gray-400 dark:text-gray-500 transition-colors hover:text-gray-600 dark:hover:text-gray-300" />
                     )}
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="mt-1 flex items-center text-sm text-red-600">
+                  <p className="mt-1 flex items-center text-sm text-red-600 dark:text-red-400">
                     <AlertCircle className="mr-1 h-4 w-4" />
                     {errors.password.message}
                   </p>
@@ -199,7 +199,7 @@ export default function LoginPage() {
             <div className="flex items-center justify-end">
               <Link
                 href="/forgot-password"
-                className="text-sm text-indigo-600 transition-colors hover:text-indigo-500"
+                className="text-sm text-blue-600 dark:text-blue-400 transition-colors hover:text-blue-500 dark:hover:text-blue-300"
               >
                 Forgot your password?
               </Link>
@@ -209,7 +209,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="group relative flex w-full justify-center rounded-lg border border-transparent bg-indigo-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              className="group relative flex w-full justify-center rounded-lg border border-transparent bg-blue-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSubmitting ? (
                 <div className="flex items-center">
@@ -222,26 +222,26 @@ export default function LoginPage() {
             </button>
 
             {/* Demo Credentials */}
-            <div className="mt-6 rounded-lg border bg-gray-50 p-4">
-              <h3 className="mb-3 text-sm font-medium text-gray-700">
+            <div className="mt-6 rounded-lg border dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-4">
+              <h3 className="mb-3 text-sm font-medium text-gray-700 dark:text-gray-300">
                 Demo Credentials:
               </h3>
               <div className="space-y-2">
                 <button
                   type="button"
                   onClick={() => fillDemoCredentials("admin")}
-                  className="w-full rounded-md border border-purple-200 bg-purple-50 px-3 py-2 text-left text-xs transition-colors hover:bg-purple-100"
+                  className="w-full rounded-md border border-purple-200 dark:border-purple-700 bg-purple-50 dark:bg-purple-900/30 px-3 py-2 text-left text-xs transition-colors hover:bg-purple-100 dark:hover:bg-purple-900/50"
                   disabled={isSubmitting}
                 >
-                  <div className="font-medium text-purple-800">
+                  <div className="font-medium text-purple-800 dark:text-purple-300">
                     Admin Account
                   </div>
-                  <div className="text-purple-600">
+                  <div className="text-purple-600 dark:text-purple-400">
                     admin@devenv.com / admin123456
                   </div>
                 </button>
-                <div className="rounded-md bg-gray-100 px-3 py-2 text-xs text-gray-600">
-                  <div className="font-medium text-gray-700">User Account</div>
+                <div className="rounded-md bg-gray-100 dark:bg-gray-600 px-3 py-2 text-xs text-gray-600 dark:text-gray-300">
+                  <div className="font-medium text-gray-700 dark:text-gray-200">User Account</div>
                   <div>Create a new account via signup →</div>
                 </div>
               </div>

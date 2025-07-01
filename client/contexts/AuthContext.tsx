@@ -28,7 +28,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // API base URL - adjust this to match your server
   const API_BASE_URL =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
 
   // Load user from localStorage on app start
   useEffect(() => {
@@ -100,7 +100,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         throw new Error(data.error || "Login failed");
       }
 
-      const { token: newToken, user: newUser } = data as AuthResponse;
+      const { accessToken: newToken, user: newUser } = data;
 
       // Save to state
       setToken(newToken);
@@ -135,7 +135,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         throw new Error(data.error || "Registration failed");
       }
 
-      const { token: newToken, user: newUser } = data as AuthResponse;
+      const { accessToken: newToken, user: newUser } = data;
 
       // Save to state
       setToken(newToken);

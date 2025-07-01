@@ -1,14 +1,17 @@
 export interface User {
-  id: string;
-  name: string;
+  _id: string;
   email: string;
-  role: "user" | "admin";
-  createdAt?: string;
+  firstName: string;
+  lastName: string;
+  isEmailVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface AuthResponse {
   message: string;
-  token: string;
+  accessToken: string;
+  refreshToken: string;
   user: User;
 }
 
@@ -18,7 +21,8 @@ export interface LoginData {
 }
 
 export interface SignupData {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
 }

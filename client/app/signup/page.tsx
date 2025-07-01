@@ -36,7 +36,8 @@ export default function SignupPage() {
     resolver: zodResolver(signupSchema),
     mode: "onBlur", // Validate on blur for better UX
     defaultValues: {
-      name: "",
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -54,7 +55,8 @@ export default function SignupPage() {
       setSubmitError(null);
     }
   }, [
-    watchedFields.name,
+    watchedFields.firstName,
+    watchedFields.lastName,
     watchedFields.email,
     watchedFields.password,
     submitError,
@@ -63,7 +65,7 @@ export default function SignupPage() {
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      router.push("/dashboard");
+      router.push("/");
     }
   }, [isAuthenticated, router]);
 
@@ -75,7 +77,7 @@ export default function SignupPage() {
       const { confirmPassword, ...signupData } = data;
       await signup(signupData);
       reset(); // Clear form
-      router.push("/dashboard");
+      // Don't redirect immediately, let the useEffect handle it
     } catch (error: any) {
       setSubmitError(error.message || "Registration failed. Please try again.");
     }
@@ -106,32 +108,32 @@ export default function SignupPage() {
   // Show loading state during initial auth check
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-green-50 to-emerald-100">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-900 dark:to-gray-800">
         <div className="text-center">
-          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-emerald-600"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
+          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-blue-600"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-300">Loading...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-green-50 to-emerald-100 px-4 py-8">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-900 dark:to-gray-800 px-4 py-8">
       <div className="w-full max-w-md space-y-8">
-        <div className="rounded-2xl bg-white p-8 shadow-xl">
+        <div className="rounded-2xl bg-white dark:bg-gray-800 p-8 shadow-xl dark:shadow-2xl">
           {/* Header */}
           <div className="text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-600">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600">
               <UserPlus className="h-6 w-6 text-white" />
             </div>
-            <h2 className="mt-6 text-3xl font-bold text-gray-900">
+            <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
               Create account
             </h2>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
               Already have an account?{" "}
               <Link
                 href="/login"
-                className="font-medium text-emerald-600 transition-colors hover:text-emerald-500"
+                className="font-medium text-blue-600 transition-colors hover:text-blue-500"
               >
                 Sign in
               </Link>
@@ -142,50 +144,91 @@ export default function SignupPage() {
           <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
             {/* Submit Error */}
             {submitError && (
-              <div className="flex items-center rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              <div className="flex items-center rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/50 px-4 py-3 text-sm text-red-700 dark:text-red-300">
                 <AlertCircle className="mr-2 h-4 w-4 flex-shrink-0" />
                 {submitError}
               </div>
             )}
 
             <div className="space-y-4">
-              {/* Name Field */}
+              {/* First Name Field */}
               <div>
                 <label
-                  htmlFor="name"
-                  className="mb-1 block text-sm font-medium text-gray-700"
+                  htmlFor="firstName"
+                  className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
-                  Full name
+                  First name
                 </label>
                 <div className="relative">
                   <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <User className="h-5 w-5 text-gray-400" />
+                    <User className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                   </div>
                   <input
-                    {...register("name")}
-                    id="name"
+                    {...register("firstName")}
+                    id="firstName"
                     type="text"
-                    autoComplete="name"
-                    className={`block w-full rounded-lg border py-3 pl-10 pr-3 transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
-                      errors.name
-                        ? "border-red-300 focus:ring-red-500"
-                        : touchedFields.name && !errors.name
-                          ? "border-green-300 focus:ring-emerald-500"
-                          : "border-gray-300"
+                    autoComplete="given-name"
+                    className={`block w-full rounded-lg border py-3 pl-10 pr-3 transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
+                      errors.firstName
+                        ? "border-red-300 dark:border-red-600 focus:ring-red-500"
+                        : touchedFields.firstName && !errors.firstName
+                          ? "border-green-300 dark:border-green-600 focus:ring-blue-500"
+                          : "border-gray-300 dark:border-gray-600"
                     }`}
-                    placeholder="Enter your full name"
+                    placeholder="Enter your first name"
                     disabled={isSubmitting}
                   />
-                  {touchedFields.name && !errors.name && (
+                  {touchedFields.firstName && !errors.firstName && (
                     <div className="absolute inset-y-0 right-0 flex items-center pr-3">
                       <CheckCircle className="h-5 w-5 text-green-500" />
                     </div>
                   )}
                 </div>
-                {errors.name && (
-                  <p className="mt-1 flex items-center text-sm text-red-600">
+                {errors.firstName && (
+                  <p className="mt-1 flex items-center text-sm text-red-600 dark:text-red-400">
                     <AlertCircle className="mr-1 h-4 w-4" />
-                    {errors.name.message}
+                    {errors.firstName.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Last Name Field */}
+              <div>
+                <label
+                  htmlFor="lastName"
+                  className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
+                  Last name
+                </label>
+                <div className="relative">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <User className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                  </div>
+                  <input
+                    {...register("lastName")}
+                    id="lastName"
+                    type="text"
+                    autoComplete="family-name"
+                    className={`block w-full rounded-lg border py-3 pl-10 pr-3 transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
+                      errors.lastName
+                        ? "border-red-300 dark:border-red-600 focus:ring-red-500"
+                        : touchedFields.lastName && !errors.lastName
+                          ? "border-green-300 dark:border-green-600 focus:ring-blue-500"
+                          : "border-gray-300 dark:border-gray-600"
+                    }`}
+                    placeholder="Enter your last name"
+                    disabled={isSubmitting}
+                  />
+                  {touchedFields.lastName && !errors.lastName && (
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                      <CheckCircle className="h-5 w-5 text-green-500" />
+                    </div>
+                  )}
+                </div>
+                {errors.lastName && (
+                  <p className="mt-1 flex items-center text-sm text-red-600 dark:text-red-400">
+                    <AlertCircle className="mr-1 h-4 w-4" />
+                    {errors.lastName.message}
                   </p>
                 )}
               </div>
@@ -194,25 +237,25 @@ export default function SignupPage() {
               <div>
                 <label
                   htmlFor="email"
-                  className="mb-1 block text-sm font-medium text-gray-700"
+                  className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   Email address
                 </label>
                 <div className="relative">
                   <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <Mail className="h-5 w-5 text-gray-400" />
+                    <Mail className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                   </div>
                   <input
                     {...register("email")}
                     id="email"
                     type="email"
                     autoComplete="email"
-                    className={`block w-full rounded-lg border py-3 pl-10 pr-3 transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
+                    className={`block w-full rounded-lg border py-3 pl-10 pr-3 transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
                       errors.email
-                        ? "border-red-300 focus:ring-red-500"
+                        ? "border-red-300 dark:border-red-600 focus:ring-red-500"
                         : touchedFields.email && !errors.email
-                          ? "border-green-300 focus:ring-emerald-500"
-                          : "border-gray-300"
+                          ? "border-green-300 dark:border-green-600 focus:ring-blue-500"
+                          : "border-gray-300 dark:border-gray-600"
                     }`}
                     placeholder="Enter your email"
                     disabled={isSubmitting}
@@ -224,7 +267,7 @@ export default function SignupPage() {
                   )}
                 </div>
                 {errors.email && (
-                  <p className="mt-1 flex items-center text-sm text-red-600">
+                  <p className="mt-1 flex items-center text-sm text-red-600 dark:text-red-400">
                     <AlertCircle className="mr-1 h-4 w-4" />
                     {errors.email.message}
                   </p>
@@ -235,23 +278,23 @@ export default function SignupPage() {
               <div>
                 <label
                   htmlFor="password"
-                  className="mb-1 block text-sm font-medium text-gray-700"
+                  className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   Password
                 </label>
                 <div className="relative">
                   <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <Lock className="h-5 w-5 text-gray-400" />
+                    <Lock className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                   </div>
                   <input
                     {...register("password")}
                     id="password"
                     type={showPassword ? "text" : "password"}
                     autoComplete="new-password"
-                    className={`block w-full rounded-lg border py-3 pl-10 pr-10 transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
+                    className={`block w-full rounded-lg border py-3 pl-10 pr-10 transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
                       errors.password
-                        ? "border-red-300 focus:ring-red-500"
-                        : "border-gray-300"
+                        ? "border-red-300 dark:border-red-600 focus:ring-red-500"
+                        : "border-gray-300 dark:border-gray-600"
                     }`}
                     placeholder="Create a password"
                     disabled={isSubmitting}
@@ -263,9 +306,9 @@ export default function SignupPage() {
                     disabled={isSubmitting}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-5 w-5 text-gray-400 transition-colors hover:text-gray-600" />
+                      <EyeOff className="h-5 w-5 text-gray-400 dark:text-gray-500 transition-colors hover:text-gray-600 dark:hover:text-gray-300" />
                     ) : (
-                      <Eye className="h-5 w-5 text-gray-400 transition-colors hover:text-gray-600" />
+                      <Eye className="h-5 w-5 text-gray-400 dark:text-gray-500 transition-colors hover:text-gray-600 dark:hover:text-gray-300" />
                     )}
                   </button>
                 </div>
@@ -327,7 +370,7 @@ export default function SignupPage() {
                 )}
 
                 {errors.password && (
-                  <p className="mt-1 flex items-center text-sm text-red-600">
+                  <p className="mt-1 flex items-center text-sm text-red-600 dark:text-red-400">
                     <AlertCircle className="mr-1 h-4 w-4" />
                     {errors.password.message}
                   </p>
@@ -338,27 +381,27 @@ export default function SignupPage() {
               <div>
                 <label
                   htmlFor="confirmPassword"
-                  className="mb-1 block text-sm font-medium text-gray-700"
+                  className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   Confirm password
                 </label>
                 <div className="relative">
                   <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <Lock className="h-5 w-5 text-gray-400" />
+                    <Lock className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                   </div>
                   <input
                     {...register("confirmPassword")}
                     id="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
                     autoComplete="new-password"
-                    className={`block w-full rounded-lg border py-3 pl-10 pr-10 transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
+                    className={`block w-full rounded-lg border py-3 pl-10 pr-10 transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
                       errors.confirmPassword
-                        ? "border-red-300 focus:ring-red-500"
+                        ? "border-red-300 dark:border-red-600 focus:ring-red-500"
                         : touchedFields.confirmPassword &&
                             !errors.confirmPassword &&
                             confirmPassword
-                          ? "border-green-300 focus:ring-emerald-500"
-                          : "border-gray-300"
+                          ? "border-green-300 dark:border-green-600 focus:ring-blue-500"
+                          : "border-gray-300 dark:border-gray-600"
                     }`}
                     placeholder="Confirm your password"
                     disabled={isSubmitting}
@@ -370,9 +413,9 @@ export default function SignupPage() {
                     disabled={isSubmitting}
                   >
                     {showConfirmPassword ? (
-                      <EyeOff className="h-5 w-5 text-gray-400 transition-colors hover:text-gray-600" />
+                      <EyeOff className="h-5 w-5 text-gray-400 dark:text-gray-500 transition-colors hover:text-gray-600 dark:hover:text-gray-300" />
                     ) : (
-                      <Eye className="h-5 w-5 text-gray-400 transition-colors hover:text-gray-600" />
+                      <Eye className="h-5 w-5 text-gray-400 dark:text-gray-500 transition-colors hover:text-gray-600 dark:hover:text-gray-300" />
                     )}
                   </button>
                   {touchedFields.confirmPassword &&
@@ -384,7 +427,7 @@ export default function SignupPage() {
                     )}
                 </div>
                 {errors.confirmPassword && (
-                  <p className="mt-1 flex items-center text-sm text-red-600">
+                  <p className="mt-1 flex items-center text-sm text-red-600 dark:text-red-400">
                     <AlertCircle className="mr-1 h-4 w-4" />
                     {errors.confirmPassword.message}
                   </p>
@@ -396,7 +439,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="group relative flex w-full justify-center rounded-lg border border-transparent bg-emerald-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              className="group relative flex w-full justify-center rounded-lg border border-transparent bg-blue-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSubmitting ? (
                 <div className="flex items-center">
@@ -409,18 +452,18 @@ export default function SignupPage() {
             </button>
 
             {/* Terms */}
-            <p className="text-center text-xs text-gray-600">
+            <p className="text-center text-xs text-gray-600 dark:text-gray-300">
               By creating an account, you agree to our{" "}
               <Link
                 href="/terms"
-                className="text-emerald-600 hover:text-emerald-500"
+                className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300"
               >
                 Terms of Service
               </Link>{" "}
               and{" "}
               <Link
                 href="/privacy"
-                className="text-emerald-600 hover:text-emerald-500"
+                className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300"
               >
                 Privacy Policy
               </Link>
