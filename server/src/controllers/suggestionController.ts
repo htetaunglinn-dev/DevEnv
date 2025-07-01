@@ -15,15 +15,15 @@ export const getAllSuggestions = async (
 
     // Build filter object
     const filter: any = {};
-    
+
     if (req.query.category) {
       filter.category = req.query.category;
     }
-    
+
     if (req.query.status) {
       filter.status = req.query.status;
     }
-    
+
     if (req.query.priority) {
       filter.priority = req.query.priority;
     }
@@ -38,11 +38,11 @@ export const getAllSuggestions = async (
 
     // Build sort object
     let sort: any = { createdAt: -1 }; // Default sort by newest
-    
+
     if (req.query.sortBy) {
       const sortBy = req.query.sortBy as string;
       const sortOrder = req.query.sortOrder === "asc" ? 1 : -1;
-      
+
       if (sortBy === "votes") {
         // Sort by vote count (virtual field)
         sort = { "votes.upvotes": sortOrder };
@@ -139,8 +139,9 @@ export const createSuggestion = async (
 
     await suggestion.save();
 
-    const populatedSuggestion = await Suggestion.findById(suggestion._id)
-      .populate("submittedBy", "firstName lastName email");
+    const populatedSuggestion = await Suggestion.findById(
+      suggestion._id
+    ).populate("submittedBy", "firstName lastName email");
 
     res.status(201).json({
       message: "Suggestion created successfully",
@@ -169,9 +170,9 @@ export const updateSuggestion = async (
 
     const { id } = req.params;
     const userId = req.user._id;
-    
+
     const suggestion = await Suggestion.findById(id);
-    
+
     if (!suggestion) {
       res.status(404).json({ message: "Suggestion not found" });
       return;
@@ -179,7 +180,9 @@ export const updateSuggestion = async (
 
     // Check if user owns the suggestion or is admin
     if (suggestion.submittedBy.toString() !== userId.toString()) {
-      res.status(403).json({ message: "Not authorized to update this suggestion" });
+      res
+        .status(403)
+        .json({ message: "Not authorized to update this suggestion" });
       return;
     }
 
@@ -225,7 +228,9 @@ export const deleteSuggestion = async (
 
     // Check if user owns the suggestion or is admin
     if (suggestion.submittedBy.toString() !== userId.toString()) {
-      res.status(403).json({ message: "Not authorized to delete this suggestion" });
+      res
+        .status(403)
+        .json({ message: "Not authorized to delete this suggestion" });
       return;
     }
 
@@ -249,7 +254,9 @@ export const voteSuggestion = async (
     const userId = req.user._id;
 
     if (!["upvote", "downvote"].includes(voteType)) {
-      res.status(400).json({ message: "Invalid vote type. Must be 'upvote' or 'downvote'" });
+      res
+        .status(400)
+        .json({ message: "Invalid vote type. Must be 'upvote' or 'downvote'" });
       return;
     }
 
@@ -277,8 +284,10 @@ export const voteSuggestion = async (
 
     await suggestion.save();
 
-    const updatedSuggestion = await Suggestion.findById(id)
-      .populate("submittedBy", "firstName lastName email");
+    const updatedSuggestion = await Suggestion.findById(id).populate(
+      "submittedBy",
+      "firstName lastName email"
+    );
 
     res.json({
       message: "Vote recorded successfully",
@@ -316,8 +325,10 @@ export const removeVote = async (
 
     await suggestion.save();
 
-    const updatedSuggestion = await Suggestion.findById(id)
-      .populate("submittedBy", "firstName lastName email");
+    const updatedSuggestion = await Suggestion.findById(id).populate(
+      "submittedBy",
+      "firstName lastName email"
+    );
 
     res.json({
       message: "Vote removed successfully",
@@ -419,7 +430,7 @@ export const getSuggestionStats = async (
 ): Promise<void> => {
   try {
     const totalSuggestions = await Suggestion.countDocuments();
-    
+
     const statusStats = await Suggestion.aggregate([
       {
         $group: {
@@ -490,7 +501,7 @@ export const adminUpdateSuggestion = async (
     // For now, any authenticated user can perform admin actions
 
     const suggestion = await Suggestion.findById(id);
-    
+
     if (!suggestion) {
       res.status(404).json({ message: "Suggestion not found" });
       return;
@@ -505,8 +516,9 @@ export const adminUpdateSuggestion = async (
       id,
       updateData,
       { new: true, runValidators: true }
-    ).populate("submittedBy", "firstName lastName email")
-     .populate("assignedTo", "firstName lastName email");
+    )
+      .populate("submittedBy", "firstName lastName email")
+      .populate("assignedTo", "firstName lastName email");
 
     res.json({
       message: "Suggestion updated successfully by admin",

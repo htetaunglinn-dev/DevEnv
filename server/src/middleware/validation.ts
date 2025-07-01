@@ -1,4 +1,5 @@
-import { body } from "express-validator";
+import { body, validationResult } from "express-validator";
+import { Request, Response, NextFunction } from 'express';
 
 export const registerValidation = [
   body("email")
@@ -76,3 +77,24 @@ export const changePasswordValidation = [
     return true;
   }),
 ];
+
+export const handleValidationErrors = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  const errors = validationResult(req);
+  
+  if (!errors.isEmpty()) {
+    res.status(400).json({
+      message: 'Validation failed',
+      errors: errors.array().map(error => ({
+        field: error.type === 'field' ? error.path : undefined,
+        message: error.msg
+      }))
+    });
+    return;
+  }
+  
+  next();
+};
