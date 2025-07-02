@@ -20,10 +20,19 @@ import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ICreatePost } from "@/interfaces/createPost.interface";
 import { PostTypes } from "@/constants/postType.enum";
+import { createPostWithImage, createPost } from "@/lib/postApi";
+import { validateImage, formatFileSize } from "@/utils/imageValidation";
+import { useToast } from "@/hooks/useToast";
+import { ToastContainer } from "@/components/ui/toast";
 
 const PostArticlePage = () => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>(PostTypes.CREATE);
+  const [isLoading, setIsLoading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageError, setImageError] = useState<string | null>(null);
+
+  const { toast, toasts, removeToast } = useToast();
 
   const {
     register,
@@ -36,39 +45,132 @@ const PostArticlePage = () => {
     reset,
   } = useForm<ICreatePost>();
 
-  const onSubmit: SubmitHandler<ICreatePost> = (data) => {
+  const onSubmit: SubmitHandler<ICreatePost> = async (data) => {
     if (activeTab === PostTypes.CREATE) {
-      if (previewImage) {
-        clearErrors("thumbnail");
-        console.log("Create Post Data:", data);
-      } else {
+      if (!imageFile) {
         setError("thumbnail", {
           type: "required",
           message: "Thumbnail is required",
         });
         return;
       }
+
+      if (imageError) {
+        return;
+      }
+
+      setIsLoading(true);
+      
+      try {
+        const postData = {
+          title: data.postTitle,
+          content: data.postContent || "",
+          category: "general",
+          status: "published" as const,
+        };
+
+        const response = await createPostWithImage(postData, imageFile);
+        
+        toast({
+          type: "success",
+          title: "Post created successfully!",
+          description: "Your post has been published.",
+        });
+
+        // Reset form
+        reset();
+        clearImage();
+        
+      } catch (error: any) {
+        toast({
+          type: "error",
+          title: "Failed to create post",
+          description: error.message || "Something went wrong. Please try again.",
+        });
+      } finally {
+        setIsLoading(false);
+      }
     } else {
-      console.log("Share Post Data:", {
-        shareUrl: data.shareUrl,
-        postContent: data.postContent,
-      });
+      // Handle share post (without image upload)
+      if (!data.shareUrl || !data.postContent) {
+        return;
+      }
+
+      setIsLoading(true);
+      
+      try {
+        const postData = {
+          title: `Shared: ${data.shareUrl}`,
+          content: data.postContent,
+          category: "general",
+          status: "published" as const,
+        };
+
+        await createPost(postData);
+        
+        toast({
+          type: "success",
+          title: "Post shared successfully!",
+          description: "Your shared post has been published.",
+        });
+
+        reset();
+        
+      } catch (error: any) {
+        toast({
+          type: "error",
+          title: "Failed to share post",
+          description: error.message || "Something went wrong. Please try again.",
+        });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // Validate the image
+      const validation = validateImage(file);
+      
+      if (!validation.isValid) {
+        setImageError(validation.error || "Invalid image");
+        setError("thumbnail", {
+          type: "validation",
+          message: validation.error || "Invalid image",
+        });
+        
+        // Show toast warning
+        toast({
+          type: "error",
+          title: "Image Upload Error",
+          description: validation.error || "Invalid image file",
+        });
+        
+        // Clear the file input
+        e.target.value = "";
+        return;
+      }
+
+      // Clear any previous errors
+      setImageError(null);
+      clearErrors("thumbnail");
+      
+      // Set the image preview and file
       const imgLink = URL.createObjectURL(file);
       setPreviewImage(imgLink);
+      setImageFile(file);
       setValue("thumbnail", file);
-      clearErrors("thumbnail");
     }
   };
 
   const clearImage = () => {
     setPreviewImage(null);
+    setImageFile(null);
+    setImageError(null);
     resetField("thumbnail");
+    clearErrors("thumbnail");
   };
 
   const handleActiveTab = (value: string) => {
@@ -117,12 +219,17 @@ const PostArticlePage = () => {
                         }}
                       >
                         {!previewImage && (
-                          <div className="flex items-center gap-2">
-                            <RiDragDropLine
-                              className="inline-block"
-                              size={20}
-                            />
-                            <p className="inline-block"> Upload Thumbnail </p>
+                          <div className="flex flex-col items-center gap-1">
+                            <div className="flex items-center gap-2">
+                              <RiDragDropLine
+                                className="inline-block"
+                                size={20}
+                              />
+                              <p className="inline-block"> Upload Thumbnail </p>
+                            </div>
+                            <p className="text-xs text-gray-500">
+                              Max 3MB • JPG, PNG, GIF
+                            </p>
                           </div>
                         )}
                       </Label>
@@ -132,7 +239,8 @@ const PostArticlePage = () => {
                         className="hidden"
                         type="file"
                         id="thumbnail"
-                        accept="image/*"
+                        accept="image/jpeg,image/png,image/gif,image/webp"
+                        multiple={false}
                       />
                       {previewImage && (
                         <Button
@@ -142,9 +250,14 @@ const PostArticlePage = () => {
                           <RxCross2 />
                         </Button>
                       )}
-                      {errors.thumbnail && !previewImage && (
+                      {(errors.thumbnail || imageError) && (
                         <span className="mt-2 inline-block text-red-500">
-                          Thumbnail is required
+                          {errors.thumbnail?.message || imageError}
+                        </span>
+                      )}
+                      {imageFile && (
+                        <span className="mt-1 inline-block text-xs text-gray-500">
+                          Size: {formatFileSize(imageFile.size)}
                         </span>
                       )}
                     </div>
@@ -177,7 +290,9 @@ const PostArticlePage = () => {
                     </div>
                   </CardContent>
                   <CardFooter>
-                    <Button type="submit">Create post</Button>
+                    <Button type="submit" disabled={isLoading}>
+                      {isLoading ? "Creating post..." : "Create post"}
+                    </Button>
                   </CardFooter>
                 </Card>
               )}
@@ -222,7 +337,9 @@ const PostArticlePage = () => {
                     </div>
                   </CardContent>
                   <CardFooter>
-                    <Button type="submit">Share post</Button>
+                    <Button type="submit" disabled={isLoading}>
+                      {isLoading ? "Sharing post..." : "Share post"}
+                    </Button>
                   </CardFooter>
                 </Card>
               )}
@@ -230,6 +347,7 @@ const PostArticlePage = () => {
           </Tabs>
         </form>
       </ScrollArea>
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
     </div>
   );
 };
