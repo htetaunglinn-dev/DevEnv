@@ -107,7 +107,7 @@ const SuggestionPage = () => {
       <ScrollArea className="w-full">
         <div className="flex h-[calc(100vh-52px)] items-center justify-center">
           <Card className=" flex w-fit shadow-md lg:min-w-[50vw] ">
-            <div className="relative hidden h-[500px] w-full basis-6/12 lg:block">
+            <div className="relative hidden w-full basis-6/12 lg:block">
               <Image
                 className="hidden rounded-xl object-cover object-right shadow-md dark:block"
                 src={darkImg}
