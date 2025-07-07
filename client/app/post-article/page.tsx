@@ -20,19 +20,20 @@ import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ICreatePost } from "@/interfaces/createPost.interface";
 import { PostTypes } from "@/constants/postType.enum";
-import { createPostWithImage, createPost } from "@/lib/postApi";
 import { validateImage, formatFileSize } from "@/utils/imageValidation";
 import { useToast } from "@/hooks/useToast";
 import { ToastContainer } from "@/components/ui/toast";
+import { useCreatePost, useCreatePostWithImage } from "@/hooks/usePosts";
 
 const PostArticlePage = () => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>(PostTypes.CREATE);
-  const [isLoading, setIsLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageError, setImageError] = useState<string | null>(null);
 
   const { toast, toasts, removeToast } = useToast();
+  const createPostMutation = useCreatePost();
+  const createPostWithImageMutation = useCreatePostWithImage();
 
   const {
     register,
@@ -59,72 +60,64 @@ const PostArticlePage = () => {
         return;
       }
 
-      setIsLoading(true);
-      
-      try {
-        const postData = {
-          title: data.postTitle,
-          content: data.postContent || "",
-          category: "general",
-          status: "published" as const,
-        };
+      const postData = {
+        title: data.postTitle,
+        content: data.postContent || "",
+        category: "general",
+        status: "published" as const,
+      };
 
-        const response = await createPostWithImage(postData, imageFile);
-        
-        toast({
-          type: "success",
-          title: "Post created successfully!",
-          description: "Your post has been published.",
-        });
-
-        // Reset form
-        reset();
-        clearImage();
-        
-      } catch (error: any) {
-        toast({
-          type: "error",
-          title: "Failed to create post",
-          description: error.message || "Something went wrong. Please try again.",
-        });
-      } finally {
-        setIsLoading(false);
-      }
+      createPostWithImageMutation.mutate(
+        { postData, imageFile },
+        {
+          onSuccess: () => {
+            toast({
+              type: "success",
+              title: "Post created successfully!",
+              description: "Your post has been published.",
+            });
+            reset();
+            clearImage();
+          },
+          onError: (error: any) => {
+            toast({
+              type: "error",
+              title: "Failed to create post",
+              description: error.message || "Something went wrong. Please try again.",
+            });
+          },
+        }
+      );
     } else {
       // Handle share post (without image upload)
       if (!data.shareUrl || !data.postContent) {
         return;
       }
 
-      setIsLoading(true);
-      
-      try {
-        const postData = {
-          title: `Shared: ${data.shareUrl}`,
-          content: data.postContent,
-          category: "general",
-          status: "published" as const,
-        };
+      const postData = {
+        title: `Shared: ${data.shareUrl}`,
+        content: data.postContent,
+        category: "general",
+        status: "published" as const,
+      };
 
-        await createPost(postData);
-        
-        toast({
-          type: "success",
-          title: "Post shared successfully!",
-          description: "Your shared post has been published.",
-        });
-
-        reset();
-        
-      } catch (error: any) {
-        toast({
-          type: "error",
-          title: "Failed to share post",
-          description: error.message || "Something went wrong. Please try again.",
-        });
-      } finally {
-        setIsLoading(false);
-      }
+      createPostMutation.mutate(postData, {
+        onSuccess: () => {
+          toast({
+            type: "success",
+            title: "Post shared successfully!",
+            description: "Your shared post has been published.",
+          });
+          reset();
+        },
+        onError: (error: any) => {
+          toast({
+            type: "error",
+            title: "Failed to share post",
+            description: error.message || "Something went wrong. Please try again.",
+          });
+        },
+      });
     }
   };
 
@@ -290,8 +283,8 @@ const PostArticlePage = () => {
                     </div>
                   </CardContent>
                   <CardFooter>
-                    <Button type="submit" disabled={isLoading}>
-                      {isLoading ? "Creating post..." : "Create post"}
+                    <Button type="submit" disabled={createPostWithImageMutation.isPending}>
+                      {createPostWithImageMutation.isPending ? "Creating post..." : "Create post"}
                     </Button>
                   </CardFooter>
                 </Card>
@@ -337,8 +330,8 @@ const PostArticlePage = () => {
                     </div>
                   </CardContent>
                   <CardFooter>
-                    <Button type="submit" disabled={isLoading}>
-                      {isLoading ? "Sharing post..." : "Share post"}
+                    <Button type="submit" disabled={createPostMutation.isPending}>
+                      {createPostMutation.isPending ? "Sharing post..." : "Share post"}
                     </Button>
                   </CardFooter>
                 </Card>

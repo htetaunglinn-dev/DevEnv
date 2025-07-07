@@ -4,9 +4,10 @@ import React from "react";
 
 import { useRouter } from "next/navigation";
 
-import { articles } from "@/data/articles";
+import { usePost } from "@/hooks/usePosts";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
@@ -20,7 +21,30 @@ interface ViewArticlePageProps {
 const ViewArticlePage = ({ searchParams }: ViewArticlePageProps) => {
   const router = useRouter();
   const { id } = searchParams;
-  const article = articles.find((article) => article.id === Number(id));
+  const { data: post, isLoading, error } = usePost(id);
+
+  if (isLoading) {
+    return (
+      <div className="w-full flex justify-center items-center h-[calc(100vh-52px)]">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (error || !post) {
+    return (
+      <div className="w-full flex justify-center items-center h-[calc(100vh-52px)]">
+        <div className="text-center">
+          <p className="text-red-500">Error loading post</p>
+          <p className="text-sm text-gray-500">Post not found or failed to load</p>
+          <Button onClick={() => router.back()} variant="outline" className="mt-4">
+            <MdOutlineArrowBackIosNew />
+            Back
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full p-[40px]">
@@ -32,50 +56,76 @@ const ViewArticlePage = ({ searchParams }: ViewArticlePageProps) => {
           </Button>
 
           <section className="px-4">
-            <h1 className="my-5 text-4xl font-semibold">{article?.title}</h1>
+            <h1 className="my-5 text-4xl font-semibold">{post.title}</h1>
             <div className="mb-5 flex items-center">
               <Avatar className="flex h-14 w-14 items-center">
                 <AvatarImage
                   className="inline-block rounded-full bg-black/80"
-                  src={article?.avatar}
-                  alt="@shadcn"
+                  src={`https://robohash.org/${post.author.email}.png?size=50x50&set=set1`}
+                  alt={`${post.author.firstName} ${post.author.lastName}`}
                 />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarFallback>
+                  {post.author.firstName[0]}{post.author.lastName[0]}
+                </AvatarFallback>
               </Avatar>
               <div className="ml-2">
-                <p className="cursor-pointer hover:underline">Htet Aung Linn</p>
+                <p className="cursor-pointer hover:underline">
+                  {post.author.firstName} {post.author.lastName}
+                </p>
                 <p className="text-sm">
-                  <span className="text-slate-700">Published in DevEnv</span>. 4
-                  mins read .{" "}
-                  {article?.time_stamp.replaceAll(".", "/") as string}
+                  <span className="text-slate-700">Published in DevEnv</span>. 
+                  {Math.ceil(post.content.length / 200)} mins read .{" "}
+                  {new Date(post.createdAt).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                  }).replaceAll(".", "/")}
                 </p>
               </div>
             </div>
 
+            {post.imageUrl && (
+              <div className="mb-6">
+                <img 
+                  src={post.imageUrl} 
+                  alt={post.title}
+                  className="w-full h-auto rounded-lg shadow-md"
+                />
+              </div>
+            )}
+
             <div className="flex flex-col space-y-3 text-lg">
-              <p>
-                This is the first of a series of articles that will walk you
-                through the process of creating a full-stack web application
-                using Angular, .NET, and GraphQL with the SQL server as a
-                database.
-              </p>
-              <p>
-                We will create a MovieApp project. The app will display a list
-                of movies and their details, such as rating, genre, description,
-                poster image, and language. It will allow us to filter the
-                movies based on the genre.
-              </p>
-              <p>
-                The app will have support for authentication and authorization.
-                It will support two roles—admin and user. An admin can add,
-                update, and delete movie data in the application. A user has
-                only read access but can add a movie to a watchlist.
-              </p>
-              <p>
-                We will then learn to deploy the app to IIS and Azure app
-                services.
-              </p>
+              {post.content.split('\n').map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))}
             </div>
+
+            <div className="mt-6 flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-500">Views: {post.views}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-500">Likes: {post.likes.length}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-500">Category: {post.category}</span>
+              </div>
+            </div>
+
+            {post.tags.length > 0 && (
+              <div className="mt-4">
+                <div className="flex flex-wrap gap-2">
+                  {post.tags.map((tag, index) => (
+                    <span 
+                      key={index} 
+                      className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm"
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </section>
         </div>
       </ScrollArea>

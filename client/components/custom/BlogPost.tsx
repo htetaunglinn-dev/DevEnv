@@ -8,10 +8,11 @@ import { formatTitle } from '@/utils/formatTitle'
 
 interface blogPostProps {
     id: number;
+    mongoId?: string;
     avatar: string;
     title: string;
     time_stamp: string;
-    img: StaticImageData;
+    img: StaticImageData | string;
 }
 
 interface dataProps {
@@ -21,12 +22,12 @@ interface dataProps {
 const BlogPost = ({ data }: dataProps) => {
     return (
         <div className='grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5 gap-6 pt-10 p-10'>
-            {data.map((item, index) => (
+            {data.map((item) => (
                 <Link
                     href={{
-                        pathname: '/view-post',
+                        pathname: '/view-article',
                         query: {
-                            id: item.id
+                            id: item.mongoId || item.id
                         }
                     }}
                     key={item.id}
@@ -44,7 +45,14 @@ const BlogPost = ({ data }: dataProps) => {
                         <CardContent>
                             <span className='text-xs text-slate-600 dark:text-white/60'>{item.time_stamp}</span>
                             <div className='relative w-full h-[200px] rounded-md mt-4'>
-                                <Image loading='lazy' className='rounded-md object-cover object-center' fill src={item.img} alt='article thumbnail'></Image>
+                                <Image 
+                                    loading='lazy' 
+                                    className='rounded-md object-cover object-center' 
+                                    fill 
+                                    src={item.img} 
+                                    alt='article thumbnail'
+                                    unoptimized={typeof item.img === 'string'}
+                                />
                             </div>
                         </CardContent>
                     </Card>
