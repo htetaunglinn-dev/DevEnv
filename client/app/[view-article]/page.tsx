@@ -29,11 +29,17 @@ const ViewArticlePage = ({ searchParams }: ViewArticlePageProps) => {
 
   if (error || !post) {
     return (
-      <div className="w-full flex justify-center items-center h-[calc(100vh-52px)]">
+      <div className="flex h-[calc(100vh-52px)] w-full items-center justify-center">
         <div className="text-center">
           <p className="text-red-500">Error loading post</p>
-          <p className="text-sm text-gray-500">Post not found or failed to load</p>
-          <Button onClick={() => router.back()} variant="outline" className="mt-4">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Post not found or failed to load
+          </p>
+          <Button
+            onClick={() => router.back()}
+            variant="outline"
+            className="mt-4"
+          >
             <MdOutlineArrowBackIosNew />
             Back
           </Button>
@@ -58,53 +64,62 @@ const ViewArticlePage = ({ searchParams }: ViewArticlePageProps) => {
                 <AvatarImage
                   className="inline-block rounded-full bg-black/80"
                   src={`https://robohash.org/${post.author.email}.png?size=50x50&set=set1`}
-                  alt={`${post.author.firstName} ${post.author.lastName}`}
+                  alt={`${post.author.firstName || 'User'} ${post.author.lastName || ''}`}
                 />
                 <AvatarFallback>
-                  {post.author.firstName[0]}{post.author.lastName[0]}
+                  {post.author.firstName?.[0] || 'U'}
+                  {post.author.lastName?.[0] || ''}
                 </AvatarFallback>
               </Avatar>
               <div className="ml-2">
                 <p className="cursor-pointer hover:underline">
-                  {post.author.firstName} {post.author.lastName}
+                  {post.author.firstName || 'Anonymous'} {post.author.lastName || 'User'}
                 </p>
                 <p className="text-sm">
-                  <span className="text-slate-700">Published in DevEnv</span>. 
+                  <span className="text-slate-700 dark:text-slate-300">Published in DevEnv. </span>
                   {Math.ceil(post.content.length / 200)} mins read .{" "}
-                  {new Date(post.createdAt).toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                  }).replaceAll(".", "/")}
+                  {new Date(post.createdAt)
+                    .toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    })
+                    .replaceAll(".", "/")}
                 </p>
               </div>
             </div>
 
             {post.imageUrl && (
               <div className="mb-6">
-                <img 
-                  src={post.imageUrl} 
+                <img
+                  src={post.imageUrl}
                   alt={post.title}
-                  className="w-full h-auto rounded-lg shadow-md"
+                  className="h-auto w-full rounded-lg shadow-md"
                 />
               </div>
             )}
 
             <div className="flex flex-col space-y-3 text-lg">
-              {post.content.split('\n').map((paragraph, index) => (
+              {post.content.split("\n").map((paragraph, index) => (
                 <p key={index}>{paragraph}</p>
               ))}
             </div>
 
             <div className="mt-6 flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-500">Views: {post.views}</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Views: {post.views}
+                </span>
               </div>
               <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-500">Likes: {post.likes.length}</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Likes: {post.likes.length}
+                </span>
               </div>
               <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-500">Category: {post.category}</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Category: {post.category}
+                </span>
               </div>
             </div>
 
@@ -112,9 +127,9 @@ const ViewArticlePage = ({ searchParams }: ViewArticlePageProps) => {
               <div className="mt-4">
                 <div className="flex flex-wrap gap-2">
                   {post.tags.map((tag, index) => (
-                    <span 
-                      key={index} 
-                      className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm"
+                    <span
+                      key={index}
+                      className="rounded-full bg-gray-100 px-2 py-1 text-sm dark:bg-gray-800"
                     >
                       #{tag}
                     </span>
