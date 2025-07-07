@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -8,8 +8,18 @@ import { usePost } from "@/hooks/usePosts";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import LoadingScreen from "@/components/loading/LoadingScreen";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import AdminPostEdit from "@/components/admin/AdminPostEdit";
+import { useAuth } from "@/contexts/AuthContext";
 
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
+import { FiEdit } from "react-icons/fi";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 
 interface ViewArticlePageProps {
@@ -21,7 +31,12 @@ interface ViewArticlePageProps {
 const ViewArticlePage = ({ searchParams }: ViewArticlePageProps) => {
   const router = useRouter();
   const { id } = searchParams;
-  const { data: post, isLoading, error } = usePost(id);
+  const { data: post, isLoading, error, refetch } = usePost(id);
+  const { user } = useAuth();
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+
+  const isAdmin = user?.role === "admin";
+  const isAuthor = user?._id === post?.author._id;
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -58,25 +73,56 @@ const ViewArticlePage = ({ searchParams }: ViewArticlePageProps) => {
           </Button>
 
           <section className="px-4">
-            <h1 className="my-5 text-4xl font-semibold">{post.title}</h1>
+            <div className="flex items-center justify-between">
+              <h1 className="my-5 text-4xl font-semibold">{post.title}</h1>
+              {isAdmin && (
+                <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="ml-4 whitespace-nowrap"
+                    >
+                      <FiEdit className="mr-2 h-4 w-4" />
+                      Edit Post
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto">
+                    {editDialogOpen && (
+                      <AdminPostEdit
+                        post={post}
+                        onSave={() => {
+                          setEditDialogOpen(false);
+                          refetch();
+                        }}
+                        onCancel={() => setEditDialogOpen(false)}
+                      />
+                    )}
+                  </DialogContent>
+                </Dialog>
+              )}
+            </div>
             <div className="mb-5 flex items-center">
               <Avatar className="flex h-14 w-14 items-center">
                 <AvatarImage
                   className="inline-block rounded-full bg-black/80"
                   src={`https://robohash.org/${post.author.email}.png?size=50x50&set=set1`}
-                  alt={`${post.author.firstName || 'User'} ${post.author.lastName || ''}`}
+                  alt={`${post.author.firstName || "User"} ${post.author.lastName || ""}`}
                 />
                 <AvatarFallback>
-                  {post.author.firstName?.[0] || 'U'}
-                  {post.author.lastName?.[0] || ''}
+                  {post.author.firstName?.[0] || "U"}
+                  {post.author.lastName?.[0] || ""}
                 </AvatarFallback>
               </Avatar>
               <div className="ml-2">
                 <p className="cursor-pointer hover:underline">
-                  {post.author.firstName || 'Anonymous'} {post.author.lastName || 'User'}
+                  {post.author.firstName || "Anonymous"}{" "}
+                  {post.author.lastName || "User"}
                 </p>
                 <p className="text-sm">
-                  <span className="text-slate-700 dark:text-slate-300">Published in DevEnv. </span>
+                  <span className="text-slate-700 dark:text-slate-300">
+                    Published in DevEnv.{" "}
+                  </span>
                   {Math.ceil(post.content.length / 200)} mins read .{" "}
                   {new Date(post.createdAt)
                     .toLocaleDateString("en-GB", {

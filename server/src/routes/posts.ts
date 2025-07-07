@@ -10,6 +10,7 @@ import {
 } from '../controllers/postController';
 import { authenticateToken, optionalAuth } from '../middleware/auth';
 import { handleValidationErrors } from '../middleware/validation';
+import { requireAdminOrAuthor } from '../middleware/admin';
 import {
   createPostValidation,
   updatePostValidation,
@@ -61,7 +62,7 @@ router.get(
 
 router.put(
   '/:id',
-  authenticateToken,
+  requireAdminOrAuthor,
   updatePostValidation,
   handleValidationErrors,
   updatePost
@@ -69,7 +70,7 @@ router.put(
 
 router.delete(
   '/:id',
-  authenticateToken,
+  requireAdminOrAuthor,
   deletePost
 );
 

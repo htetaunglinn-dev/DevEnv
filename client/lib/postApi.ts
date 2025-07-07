@@ -5,7 +5,8 @@ export interface CreatePostRequest {
   content: string;
   category?: string;
   tags?: string;
-  status?: 'draft' | 'published';
+  status?: 'draft' | 'published' | 'archived';
+  imageUrl?: string;
 }
 
 export interface CreatePostResponse {

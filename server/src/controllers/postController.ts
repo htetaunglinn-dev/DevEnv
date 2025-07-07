@@ -151,7 +151,8 @@ export const updatePost = async (
       return;
     }
 
-    if (post.author.toString() !== req.user?._id.toString()) {
+    // Allow admin or author to update post
+    if (post.author.toString() !== req.user?._id.toString() && req.user?.role !== 'admin') {
       res.status(403).json({
         success: false,
         message: "Not authorized to update this post",
@@ -206,7 +207,8 @@ export const deletePost = async (
       return;
     }
 
-    if (post.author.toString() !== req.user?._id.toString()) {
+    // Allow admin or author to delete post
+    if (post.author.toString() !== req.user?._id.toString() && req.user?.role !== 'admin') {
       res.status(403).json({
         success: false,
         message: "Not authorized to delete this post",
