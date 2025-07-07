@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { usePost } from "@/hooks/usePosts";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import LoadingScreen from "@/components/loading/LoadingScreen";
 
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
@@ -24,11 +24,7 @@ const ViewArticlePage = ({ searchParams }: ViewArticlePageProps) => {
   const { data: post, isLoading, error } = usePost(id);
 
   if (isLoading) {
-    return (
-      <div className="w-full flex justify-center items-center h-[calc(100vh-52px)]">
-        <LoadingSpinner />
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (error || !post) {
