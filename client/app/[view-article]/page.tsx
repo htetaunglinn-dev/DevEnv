@@ -99,10 +99,10 @@ const ViewArticlePage = ({ searchParams }: ViewArticlePageProps) => {
   }
 
   return (
-    <div className="w-full p-[40px]">
+    <div className="w-full">
       <ToastContainer toasts={toasts} onRemove={removeToast} />
       <ScrollArea className="h-[calc(100vh-52px)] w-full">
-        <div className="m-auto w-[85vw] md:w-[60vw]">
+        <div className="m-auto w-[85vw] py-4 md:w-[60vw]">
           <Button onClick={() => router.back()} variant={"link"}>
             <MdOutlineArrowBackIosNew />
             Back
