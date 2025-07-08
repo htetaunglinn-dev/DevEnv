@@ -4,8 +4,7 @@ import React, { useState } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { usePost } from "@/hooks/usePosts";
-import { deletePost } from "@/lib/postApi";
+import { usePost, useDeletePost } from "@/hooks/usePosts";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/useToast";
@@ -48,6 +47,7 @@ const ViewArticlePage = ({ searchParams }: ViewArticlePageProps) => {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const { toast, toasts, removeToast } = useToast();
+  const deletePostMutation = useDeletePost();
 
   const isAdmin = user?.role === "admin";
   const isAuthor = user?._id === post?.author._id;
@@ -55,7 +55,7 @@ const ViewArticlePage = ({ searchParams }: ViewArticlePageProps) => {
 
   const handleDelete = async () => {
     try {
-      await deletePost(id);
+      await deletePostMutation.mutateAsync(id);
       setDeleteDialogOpen(false);
       toast({
         title: "Success",
