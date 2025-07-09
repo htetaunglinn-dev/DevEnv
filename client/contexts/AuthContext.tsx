@@ -152,6 +152,35 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
+  const refreshUser = async (): Promise<void> => {
+    try {
+      if (!token) {
+        throw new Error("No token available");
+      }
+
+      const response = await fetch(`${API_BASE_URL}/auth/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to refresh user data");
+      }
+
+      const data = await response.json();
+      const updatedUser = data.user;
+      
+      // Update state and localStorage
+      setUser(updatedUser);
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+    } catch (error) {
+      console.error("Refresh user error:", error);
+      throw error;
+    }
+  };
+
   const logout = (): void => {
     setUser(null);
     setToken(null);
@@ -167,6 +196,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     login,
     signup,
     logout,
+    refreshUser,
     loading,
     isAuthenticated,
   };

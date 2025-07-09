@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Edit3, BookOpen, Heart } from "lucide-react";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import { toast } from "sonner";
 
 const ProfilePage = () => {
   const { user, logout } = useAuth();
@@ -24,6 +25,10 @@ const ProfilePage = () => {
   
   const draftPostsQuery = useMyPosts({ status: 'draft' });
   const { articles: draftPosts, isLoading: draftsLoading, error: draftsError } = usePostsPage(draftPostsQuery);
+
+  const handleProfileUpdateSuccess = () => {
+    toast.success("Profile updated successfully!");
+  };
 
   if (!user) {
     return (
@@ -54,6 +59,7 @@ const ProfilePage = () => {
                   totalPosts={totalPosts}
                   totalDrafts={totalDrafts}
                   onLogout={logout}
+                  onProfileUpdateSuccess={handleProfileUpdateSuccess}
                 />
               </CardContent>
             </Card>

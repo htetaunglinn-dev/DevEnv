@@ -1,17 +1,22 @@
+import { useState } from "react";
 import { User } from "@/interfaces/auth.interface";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CalendarDays, Mail, User as UserIcon, Edit3, BookOpen, Heart } from "lucide-react";
+import { CalendarDays, Mail, User as UserIcon, Edit3, BookOpen, Heart, LogOut } from "lucide-react";
+import EditProfileDialog from "./EditProfileDialog";
 
 interface ProfileCardProps {
   user: User;
   totalPosts: number;
   totalDrafts: number;
   onLogout: () => void;
+  onProfileUpdateSuccess?: () => void;
 }
 
-export const ProfileCard = ({ user, totalPosts, totalDrafts, onLogout }: ProfileCardProps) => {
+export const ProfileCard = ({ user, totalPosts, totalDrafts, onLogout, onProfileUpdateSuccess }: ProfileCardProps) => {
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  
   const getInitials = (firstName?: string, lastName?: string) => {
     const first = firstName?.charAt(0) || '';
     const last = lastName?.charAt(0) || '';
@@ -44,10 +49,6 @@ export const ProfileCard = ({ user, totalPosts, totalDrafts, onLogout }: Profile
             {getInitials(user.firstName || '', user.lastName || '')}
           </AvatarFallback>
         </Avatar>
-        <Button variant="outline" className="w-full">
-          <Edit3 className="w-4 h-4 mr-2" />
-          Edit Profile
-        </Button>
       </div>
 
       {/* Profile Info */}
@@ -105,10 +106,22 @@ export const ProfileCard = ({ user, totalPosts, totalDrafts, onLogout }: Profile
 
       {/* Action Buttons */}
       <div className="flex flex-col gap-2">
+        <Button onClick={() => setIsEditDialogOpen(true)} variant="outline">
+          <Edit3 className="w-4 h-4 mr-2" />
+          Edit Profile
+        </Button>
         <Button onClick={onLogout} variant="outline">
+          <LogOut className="w-4 h-4 mr-2" />
           Sign Out
         </Button>
       </div>
+      
+      {/* Edit Profile Dialog */}
+      <EditProfileDialog 
+        isOpen={isEditDialogOpen} 
+        onClose={() => setIsEditDialogOpen(false)}
+        onSuccess={onProfileUpdateSuccess}
+      />
     </div>
   );
 };
