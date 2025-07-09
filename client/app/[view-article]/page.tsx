@@ -7,8 +7,7 @@ import { useRouter } from "next/navigation";
 import { usePost, useDeletePost } from "@/hooks/usePosts";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/useToast";
-import { ToastContainer } from "@/components/ui/toast";
+import { toast } from "sonner";
 import LoadingScreen from "@/components/loading/LoadingScreen";
 import {
   Dialog,
@@ -46,7 +45,6 @@ const ViewArticlePage = ({ searchParams }: ViewArticlePageProps) => {
   const { user } = useAuth();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const { toast, toasts, removeToast } = useToast();
   const deletePostMutation = useDeletePost();
 
   const isAdmin = user?.role === "admin";
@@ -57,19 +55,11 @@ const ViewArticlePage = ({ searchParams }: ViewArticlePageProps) => {
     try {
       await deletePostMutation.mutateAsync(id);
       setDeleteDialogOpen(false);
-      toast({
-        title: "Success",
-        description: "Post deleted successfully",
-        type: "success",
-      });
+      toast.success("Post deleted successfully");
       router.push("/");
     } catch (error) {
       console.error("Error deleting post:", error);
-      toast({
-        title: "Error",
-        description: "Failed to delete post. Please try again.",
-        type: "error",
-      });
+      toast.error("Failed to delete post. Please try again.");
     }
   };
 
@@ -100,7 +90,6 @@ const ViewArticlePage = ({ searchParams }: ViewArticlePageProps) => {
 
   return (
     <div className="w-full">
-      <ToastContainer toasts={toasts} onRemove={removeToast} />
       <ScrollArea className="h-[calc(100vh-52px)] w-full">
         <div className="m-auto w-[85vw] py-4 md:w-[60vw]">
           <Button onClick={() => router.back()} variant={"link"}>

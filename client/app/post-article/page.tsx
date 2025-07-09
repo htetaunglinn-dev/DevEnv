@@ -21,8 +21,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { ICreatePost } from "@/interfaces/createPost.interface";
 import { PostTypes } from "@/constants/postType.enum";
 import { validateImage, formatFileSize } from "@/utils/imageValidation";
-import { useToast } from "@/hooks/useToast";
-import { ToastContainer } from "@/components/ui/toast";
+import { toast } from "sonner";
 import { useCreatePost, useCreatePostWithImage } from "@/hooks/usePosts";
 
 const PostArticlePage = () => {
@@ -31,7 +30,6 @@ const PostArticlePage = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageError, setImageError] = useState<string | null>(null);
 
-  const { toast, toasts, removeToast } = useToast();
   const createPostMutation = useCreatePost();
   const createPostWithImageMutation = useCreatePostWithImage();
 
@@ -71,20 +69,12 @@ const PostArticlePage = () => {
         { postData, imageFile },
         {
           onSuccess: () => {
-            toast({
-              type: "success",
-              title: "Post created successfully!",
-              description: "Your post has been published.",
-            });
+            toast.success("Post created successfully!");
             reset();
             clearImage();
           },
           onError: (error: any) => {
-            toast({
-              type: "error",
-              title: "Failed to create post",
-              description: error.message || "Something went wrong. Please try again.",
-            });
+            toast.error(error.message || "Failed to create post. Please try again.");
           },
         }
       );
@@ -103,19 +93,11 @@ const PostArticlePage = () => {
 
       createPostMutation.mutate(postData, {
         onSuccess: () => {
-          toast({
-            type: "success",
-            title: "Post shared successfully!",
-            description: "Your shared post has been published.",
-          });
+          toast.success("Post shared successfully!");
           reset();
         },
         onError: (error: any) => {
-          toast({
-            type: "error",
-            title: "Failed to share post",
-            description: error.message || "Something went wrong. Please try again.",
-          });
+          toast.error(error.message || "Failed to share post. Please try again.");
         },
       });
     }
@@ -135,11 +117,7 @@ const PostArticlePage = () => {
         });
         
         // Show toast warning
-        toast({
-          type: "error",
-          title: "Image Upload Error",
-          description: validation.error || "Invalid image file",
-        });
+        toast.error(validation.error || "Invalid image file");
         
         // Clear the file input
         e.target.value = "";
@@ -340,7 +318,6 @@ const PostArticlePage = () => {
           </Tabs>
         </form>
       </ScrollArea>
-      <ToastContainer toasts={toasts} onRemove={removeToast} />
     </div>
   );
 };
