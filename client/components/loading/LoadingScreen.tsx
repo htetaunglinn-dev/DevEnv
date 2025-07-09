@@ -1,13 +1,13 @@
-'use client'
+"use client";
 
 import GridLoader from "react-spinners/GridLoader";
 
 const LoadingScreen = () => {
-    return (
-        <div className="h-full w-full flex justify-center items-center m-auto ">
-            <GridLoader color="#36d7b7" />
-        </div>
-    )
-}
+  return (
+    <div className="m-auto flex min-h-screen w-full items-center justify-center ">
+      <GridLoader color="#2563eb" />
+    </div>
+  );
+};
 
-export default LoadingScreen
+export default LoadingScreen;
