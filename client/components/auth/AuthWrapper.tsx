@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
 import LoginPage from "@/app/login/page";
 import SignupPage from "@/app/signup/page";
+import LoadingScreen from "@/components/loading/LoadingScreen";
 
 export default function AuthWrapper({
   children,
@@ -15,16 +16,7 @@ export default function AuthWrapper({
 
   // Show loading state while checking authentication
   if (loading) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-gray-900">
-        <div className="text-center">
-          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-indigo-600"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-400">
-            Checking authentication...
-          </p>
-        </div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   // Show auth forms if not authenticated

@@ -6,6 +6,7 @@ import Navbar from "@/components/navbar/Navbar";
 import SideDrawer from "@/components/layout/sidedrawer/SideDrawer";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { ReactNode } from "react";
+import LoadingScreen from "@/components/loading/LoadingScreen";
 
 interface LayoutWrapperProps {
   children: ReactNode;
@@ -33,14 +34,7 @@ export default function LayoutWrapper({ children }: LayoutWrapperProps) {
 
   // Loading state
   if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-blue-600"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-300">Loading...</p>
-        </div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   // If user is authenticated, show full layout

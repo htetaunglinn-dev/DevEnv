@@ -17,6 +17,7 @@ import {
   AlertCircle,
   CheckCircle,
 } from "lucide-react";
+import LoadingScreen from "@/components/loading/LoadingScreen";
 
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -107,14 +108,7 @@ export default function SignupPage() {
 
   // Show loading state during initial auth check
   if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-900 dark:to-gray-800">
-        <div className="text-center">
-          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-blue-600"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-300">Loading...</p>
-        </div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   return (
