@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { usePost, useDeletePost } from "@/hooks/usePosts";
@@ -27,6 +27,8 @@ import AdminPostEdit from "@/components/admin/AdminPostEdit";
 import { useAuth } from "@/contexts/AuthContext";
 import { CommentList } from "@/components/comments";
 import { generateAvatarUrl } from "@/utils/avatarUtils";
+import LikeButton from "@/components/ui/LikeButton";
+import PostEngagement from "@/components/ui/PostEngagement";
 
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
@@ -77,14 +79,15 @@ const ViewArticlePage = ({ searchParams }: ViewArticlePageProps) => {
           <p className="text-sm text-gray-500 dark:text-gray-400">
             Post not found or failed to load
           </p>
-          <Button
-            onClick={() => router.back()}
-            variant="outline"
-            className="mt-4"
-          >
-            <MdOutlineArrowBackIosNew />
-            Back
-          </Button>
+          <Link href="/">
+            <Button
+              variant="outline"
+              className="mt-4"
+            >
+              <MdOutlineArrowBackIosNew />
+              Back
+            </Button>
+          </Link>
         </div>
       </div>
     );
@@ -94,10 +97,12 @@ const ViewArticlePage = ({ searchParams }: ViewArticlePageProps) => {
     <div className="w-full">
       <ScrollArea className="h-[calc(100vh-52px)] w-full">
         <div className="m-auto w-[85vw] py-4 md:w-[60vw]">
-          <Button onClick={() => router.back()} variant={"link"}>
-            <MdOutlineArrowBackIosNew />
-            Back
-          </Button>
+          <Link href="/">
+            <Button variant={"link"}>
+              <MdOutlineArrowBackIosNew />
+              Back
+            </Button>
+          </Link>
 
           <section className="px-4">
             <div className="flex items-center justify-between">
@@ -178,26 +183,32 @@ const ViewArticlePage = ({ searchParams }: ViewArticlePageProps) => {
               ))}
             </div>
 
-            <div className="mt-6 flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  Views: {post.views}
-                </span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  Likes: {post.likes.length}
-                </span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  Comments: {post.commentsCount || 0}
-                </span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  Category: {post.category}
-                </span>
+            {/* Engagement Section */}
+            <div className="mt-8 border-t border-b border-gray-200 dark:border-gray-700 py-6">
+              <div className="flex items-center justify-between flex-wrap gap-4">
+                {/* Left side - Action buttons */}
+                <div className="flex items-center space-x-4">
+                  <LikeButton 
+                    postId={id}
+                    initialLikes={post.likes || []}
+                    size="lg"
+                    showCount={true}
+                    variant="outline"
+                  />
+                </div>
+                
+                {/* Right side - Stats */}
+                <div className="flex items-center space-x-6 text-sm text-gray-500 dark:text-gray-400">
+                  <div className="flex items-center space-x-1">
+                    <span>Views: {post.views}</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <span>Comments: {post.commentsCount || 0}</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <span>Category: {post.category}</span>
+                  </div>
+                </div>
               </div>
             </div>
 

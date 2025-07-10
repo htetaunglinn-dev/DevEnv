@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -43,6 +43,21 @@ const CommentItem = ({ comment, onUpdate, onReply }: CommentItemProps) => {
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(comment.likesCount || 0);
   const { user } = useAuth();
+
+  // Check if current user has liked this comment and update like count
+  useEffect(() => {
+    if (user?._id && Array.isArray(comment.likes)) {
+      setIsLiked(comment.likes.includes(user._id));
+    } else {
+      setIsLiked(false);
+    }
+
+    // Update likes count from comment prop
+    setLikesCount(
+      comment.likesCount ||
+        (Array.isArray(comment.likes) ? comment.likes.length : 0),
+    );
+  }, [user?._id, comment.likes, comment.likesCount]);
 
   const isAuthor = user?._id === comment.author._id;
   const canEdit = isAuthor && !isEditing;
@@ -102,7 +117,10 @@ const CommentItem = ({ comment, onUpdate, onReply }: CommentItemProps) => {
         <div className="flex items-start space-x-4">
           <Avatar className="h-10 w-10">
             <AvatarImage
-              src={generateAvatarUrl(comment.author.firstName, comment.author.lastName)}
+              src={generateAvatarUrl(
+                comment.author.firstName,
+                comment.author.lastName,
+              )}
             />
             <AvatarFallback>
               {comment.author.firstName[0]}

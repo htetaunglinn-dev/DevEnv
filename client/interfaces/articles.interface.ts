@@ -6,4 +6,7 @@ export interface TArticle {
   title: string;
   time_stamp: string;
   img: StaticImageData;
+  likes?: string[];
+  views?: number;
+  commentsCount?: number;
 }

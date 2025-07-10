@@ -259,14 +259,14 @@ export const toggleLike = async (
     }
 
     await post.toggleLike(userId);
+    
+    // Populate author data for consistency
+    await post.populate("author", "firstName lastName email");
 
     res.json({
       success: true,
       message: "Post like toggled successfully",
-      data: {
-        likesCount: post.likes.length,
-        isLiked: post.likes.includes(userId),
-      },
+      data: post,
     });
   } catch (error: any) {
     console.error("Error toggling post like:", error);

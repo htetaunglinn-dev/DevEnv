@@ -93,9 +93,16 @@ export const getComments = async (
         const replies = await Comment.find({ parent: comment._id })
           .populate("author", "firstName lastName")
           .sort({ createdAt: 1 });
+        
+        // Add likesCount to each reply
+        const repliesWithLikes = replies.map(reply => ({
+          ...reply.toObject(),
+          likesCount: reply.likes.length,
+        }));
+        
         return {
           ...comment.toObject(),
-          replies,
+          replies: repliesWithLikes,
           repliesCount: replies.length,
           likesCount: comment.likes.length,
         };

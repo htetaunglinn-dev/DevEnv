@@ -19,6 +19,9 @@ export const transformPostToArticle = (post: Post): TArticle & { mongoId: string
       year: 'numeric',
     }),
     img: post.imageUrl || '/images/default-post.jpg' as any,
+    likes: post.likes || [],
+    views: post.views || 0,
+    commentsCount: post.commentsCount || 0,
   };
 };
 
