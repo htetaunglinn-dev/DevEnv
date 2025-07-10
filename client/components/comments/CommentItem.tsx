@@ -12,6 +12,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
   Heart,
   MessageCircle,
   MoreHorizontal,
@@ -43,6 +50,7 @@ const CommentItem = ({ comment, onUpdate, onReply, isReply = false }: CommentIte
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(comment.likesCount || 0);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const { user } = useAuth();
 
   // Check if current user has liked this comment and update like count
@@ -82,10 +90,9 @@ const CommentItem = ({ comment, onUpdate, onReply, isReply = false }: CommentIte
   };
 
   const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this comment?")) return;
-
     try {
       await deleteComment(comment._id);
+      setDeleteDialogOpen(false);
       toast.success("Comment deleted successfully!");
       onUpdate?.();
     } catch (error: any) {
@@ -159,7 +166,7 @@ const CommentItem = ({ comment, onUpdate, onReply, isReply = false }: CommentIte
                     )}
                     {canDelete && (
                       <DropdownMenuItem
-                        onClick={handleDelete}
+                        onClick={() => setDeleteDialogOpen(true)}
                         className="text-red-600"
                       >
                         <Trash2 className="mr-2 h-4 w-4" />
@@ -269,6 +276,32 @@ const CommentItem = ({ comment, onUpdate, onReply, isReply = false }: CommentIte
           </div>
         )}
       </CardContent>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Delete Comment</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Are you sure you want to delete this comment? This action cannot be
+              undone.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setDeleteDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleDelete}>
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 };
