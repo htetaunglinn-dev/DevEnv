@@ -33,9 +33,10 @@ interface CommentItemProps {
   comment: Comment;
   onUpdate?: () => void;
   onReply?: () => void;
+  isReply?: boolean; // Track if this is a reply to prevent nested replies
 }
 
-const CommentItem = ({ comment, onUpdate, onReply }: CommentItemProps) => {
+const CommentItem = ({ comment, onUpdate, onReply, isReply = false }: CommentItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -226,15 +227,17 @@ const CommentItem = ({ comment, onUpdate, onReply }: CommentItemProps) => {
                   <span className="text-xs">{likesCount}</span>
                 </Button>
 
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleReply}
-                  className="flex items-center space-x-1 text-gray-500 hover:text-blue-500"
-                >
-                  <MessageCircle className="h-4 w-4" />
-                  <span className="text-xs">Reply</span>
-                </Button>
+                {!isReply && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleReply}
+                    className="flex items-center space-x-1 text-gray-500 hover:text-blue-500"
+                  >
+                    <MessageCircle className="h-4 w-4" />
+                    <span className="text-xs">Reply</span>
+                  </Button>
+                )}
               </div>
             )}
           </div>
@@ -260,6 +263,7 @@ const CommentItem = ({ comment, onUpdate, onReply }: CommentItemProps) => {
                 comment={reply}
                 onUpdate={onUpdate}
                 onReply={onReply}
+                isReply={true}
               />
             ))}
           </div>
