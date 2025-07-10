@@ -26,6 +26,7 @@ import {
 import AdminPostEdit from "@/components/admin/AdminPostEdit";
 import { useAuth } from "@/contexts/AuthContext";
 import { CommentList } from "@/components/comments";
+import { generateAvatarUrl } from "@/utils/avatarUtils";
 
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
@@ -132,7 +133,7 @@ const ViewArticlePage = ({ searchParams }: ViewArticlePageProps) => {
               <Avatar className="flex h-14 w-14 items-center">
                 <AvatarImage
                   className="inline-block rounded-full bg-black/80"
-                  src={`https://robohash.org/${post.author.email}.png?size=50x50&set=set1`}
+                  src={generateAvatarUrl(post.author.firstName, post.author.lastName, 50)}
                   alt={`${post.author.firstName || "User"} ${post.author.lastName || ""}`}
                 />
                 <AvatarFallback>

@@ -1,5 +1,6 @@
 import { Post } from './postApi';
 import { TArticle } from '@/interfaces/articles.interface';
+import { generateAvatarUrl, generateAvatarUrlFromEmail } from '@/utils/avatarUtils';
 
 export const transformPostToArticle = (post: Post): TArticle & { mongoId: string } => {
   // Create a consistent numeric ID from MongoDB ObjectID
@@ -8,7 +9,9 @@ export const transformPostToArticle = (post: Post): TArticle & { mongoId: string
   return {
     id: numericId,
     mongoId: post._id,
-    avatar: `https://robohash.org/${post.author.email}.png?size=50x50&set=set1`,
+    avatar: post.author?.firstName 
+      ? generateAvatarUrl(post.author.firstName, post.author.lastName, 50)
+      : generateAvatarUrlFromEmail(post.author?.email || 'user@example.com', 50),
     title: post.title,
     time_stamp: new Date(post.createdAt).toLocaleDateString('en-GB', {
       day: '2-digit',

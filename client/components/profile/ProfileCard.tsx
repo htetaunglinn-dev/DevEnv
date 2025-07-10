@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CalendarDays, Mail, User as UserIcon, Edit3, BookOpen, Heart, LogOut } from "lucide-react";
 import EditProfileDialog from "./EditProfileDialog";
+import { generateAvatarUrl } from "@/utils/avatarUtils";
 
 interface ProfileCardProps {
   user: User;
@@ -42,7 +43,7 @@ export const ProfileCard = ({ user, totalPosts, totalDrafts, onLogout, onProfile
       <div className="flex flex-col items-center space-y-4">
         <Avatar className="w-32 h-32">
           <AvatarImage 
-            src={`https://robohash.org/${user.email || 'user'}.png?size=128x128&set=set1`}
+            src={generateAvatarUrl(user.firstName, user.lastName, 128)}
             alt={`${user.firstName || 'User'} ${user.lastName || ''}`}
           />
           <AvatarFallback className="text-2xl">

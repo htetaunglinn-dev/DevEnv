@@ -16,6 +16,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { discoverData, contributeData } from "@/data/sidemenu";
+import { generateAvatarUrl } from "@/utils/avatarUtils";
 
 //icons
 import { BiSolidLeftArrow } from "react-icons/bi";
@@ -179,7 +180,7 @@ const SideDrawer = () => {
                 <AvatarImage
                   width={36}
                   className="inline-block rounded-lg"
-                  src="https://github.com/shadcn.png"
+                  src={generateAvatarUrl(user?.firstName, user?.lastName, 36)}
                   alt="@shadcn"
                 />
                 <AvatarFallback>

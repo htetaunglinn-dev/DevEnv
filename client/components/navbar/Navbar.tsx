@@ -38,6 +38,7 @@ import { RiLogoutBoxRLine } from "react-icons/ri";
 import { Input } from "../ui/input";
 import { useStore } from "@/store/store";
 import { useAuth } from "@/contexts/AuthContext";
+import { generateAvatarUrl } from "@/utils/avatarUtils";
 
 const Navbar = () => {
   const router = useRouter();
@@ -162,7 +163,7 @@ const Navbar = () => {
                           <AvatarImage
                             width={36}
                             className="inline-block rounded-lg"
-                            src="https://github.com/shadcn.png"
+                            src={generateAvatarUrl(user?.firstName, user?.lastName, 36)}
                             alt="@shadcn"
                           />
                           <AvatarFallback>
@@ -223,7 +224,7 @@ const Navbar = () => {
                   <AvatarImage
                     width={36}
                     className="inline-block rounded-lg"
-                    src="https://github.com/shadcn.png"
+                    src={generateAvatarUrl(user?.firstName, user?.lastName, 36)}
                     alt="@shadcn"
                   />
                   <AvatarFallback>

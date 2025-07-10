@@ -27,6 +27,7 @@ import {
 import { toast } from "sonner";
 import CommentForm from "./CommentForm";
 import { useAuth } from "@/contexts/AuthContext";
+import { generateAvatarUrl } from "@/utils/avatarUtils";
 
 interface CommentItemProps {
   comment: Comment;
@@ -101,7 +102,7 @@ const CommentItem = ({ comment, onUpdate, onReply }: CommentItemProps) => {
         <div className="flex items-start space-x-4">
           <Avatar className="h-10 w-10">
             <AvatarImage
-              src={`https://ui-avatars.com/api/?name=${comment.author.firstName}+${comment.author.lastName}&background=random`}
+              src={generateAvatarUrl(comment.author.firstName, comment.author.lastName)}
             />
             <AvatarFallback>
               {comment.author.firstName[0]}

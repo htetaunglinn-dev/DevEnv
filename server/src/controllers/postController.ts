@@ -67,7 +67,7 @@ export const getPosts = async (req: Request, res: Response): Promise<void> => {
     }
 
     const posts = await Post.find(query)
-      .populate("author", "firstName lastName")
+      .populate("author", "firstName lastName email")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
@@ -296,7 +296,7 @@ export const getMyPosts = async (
     }
 
     const posts = await Post.find(query)
-      .populate("author", "firstName lastName")
+      .populate("author", "firstName lastName email")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
