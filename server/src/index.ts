@@ -12,6 +12,7 @@ import authRoutes from "./routes/auth";
 import suggestionRoutes from "./routes/suggestions";
 import articleRoutes from "./routes/articles";
 import postRoutes from "./routes/posts";
+import commentRoutes from "./routes/comments";
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -42,6 +43,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/suggestions", suggestionRoutes);
 app.use("/api/articles", articleRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/comments", commentRoutes);
 
 // Health check
 app.get("/health", (req, res) => {

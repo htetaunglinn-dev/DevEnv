@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import AdminPostEdit from "@/components/admin/AdminPostEdit";
 import { useAuth } from "@/contexts/AuthContext";
+import { CommentList } from "@/components/comments";
 
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
@@ -189,6 +190,11 @@ const ViewArticlePage = ({ searchParams }: ViewArticlePageProps) => {
               </div>
               <div className="flex items-center space-x-2">
                 <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Comments: {post.commentsCount || 0}
+                </span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-500 dark:text-gray-400">
                   Category: {post.category}
                 </span>
               </div>
@@ -208,6 +214,11 @@ const ViewArticlePage = ({ searchParams }: ViewArticlePageProps) => {
                 </div>
               </div>
             )}
+
+            {/* Comments Section */}
+            <div className="mt-12 border-t pt-8">
+              <CommentList postId={id} />
+            </div>
           </section>
         </div>
       </ScrollArea>
